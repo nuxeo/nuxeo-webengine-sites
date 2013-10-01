@@ -4,7 +4,7 @@
 
   <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
     point="layouts">
-    
+
     <layout name="blogcontainer">
       <templates>
         <template mode="any">/layouts/layout_default_template.xhtml</template>
@@ -67,7 +67,7 @@
           </property>
         </properties>
       </widget>
-      
+
       <widget name="baseline" type="text">
         <translated>true</translated>
         <fields>
@@ -130,7 +130,7 @@
       </widget>
 
     </layout>
-        
+
     <layout name="blog">
       <templates>
         <template mode="any">/layouts/layout_default_template.xhtml</template>
@@ -192,7 +192,7 @@
         </properties>
       </widget>
     </layout>
-    
+
     <layout name="blogpost">
       <templates>
         <template mode="any">/layouts/layout_default_template.xhtml</template>
@@ -203,7 +203,7 @@
         </row>
         <row>
           <widget>accept_trackback</widget>
-        </row>           
+        </row>
       </rows>
       <widget name="atomid" type="text">
         <translated>true</translated>
@@ -221,15 +221,7 @@
         </fields>
       </widget>
     </layout>
-    
-    <layout name="BlogSite">
-      <templates>
-        <template mode="any">
-          /layouts/layout_blog_url_link.xhtml
-        </template>
-      </templates>      
-    </layout>  
-        
+
   </extension>
 
 </component>

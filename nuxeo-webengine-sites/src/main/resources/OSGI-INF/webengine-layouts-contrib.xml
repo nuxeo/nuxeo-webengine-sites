@@ -220,14 +220,6 @@
       </widget>
     </layout>
 
-    <layout name="WebSite">
-      <templates>
-        <template mode="any">
-          /layouts/layout_site_url_link.xhtml
-        </template>
-      </templates>
-    </layout>
-
   </extension>
 
 </component>
