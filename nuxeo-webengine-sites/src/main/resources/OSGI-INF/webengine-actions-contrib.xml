@@ -7,17 +7,16 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="actions">
 
-    <action id="TAB_WEBVIEW" link="/incl/tabs/workspace_view.xhtml" enabled="true"
-      order="30" label="action.webcontainer.preview" icon="/icons/file.gif">
+    <action id="TAB_WEBVIEW" link="/incl/tabs/workspace_view.xhtml"
+      enabled="true" order="30" label="action.webcontainer.preview" icon="/icons/file.gif"
+      type="rest_document_link">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>isWebContainer</filter-id>
     </action>
 
     <action id="webSiteLink" type="bare_link"
-      link="#{baseURL}site/sites/#{currentDocument.webc.url}"
-      label="label.website.view"
-      icon="/icons/switch.png"
-      order="-10">
+      link="#{baseURL}site/sites/#{currentDocument.webc.url}" label="label.website.view"
+      icon="/icons/switch.png" order="-10">
       <category>DOCUMENT_UPPER_ACTION</category>
       <filter-id>isWebContainer</filter-id>
       <filter-id>isWebSite</filter-id>
@@ -47,7 +46,7 @@
     </filter>
 
     <filter id="isWebContainer">
-   	  <rule grant="true">
+      <rule grant="true">
         <facet>WebView</facet>
       </rule>
     </filter>
