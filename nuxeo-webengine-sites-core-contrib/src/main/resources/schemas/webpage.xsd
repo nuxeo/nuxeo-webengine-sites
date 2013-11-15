@@ -3,10 +3,17 @@
   targetNamespace="http://project.nuxeo.org/schemas/webengine/site/sites/webpage"
   xmlns:tns="http://project.nuxeo.org/schemas/webengine/site/wiki/webpage"
   elementFormDefault="qualified">
+
+  <xs:simpleType name="clob">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="999999999" />
+    </xs:restriction>
+  </xs:simpleType>
+
   <element name="pushtomenu" type="boolean" default="true"></element>
   <element name="template" type="string"></element>
   <element name="tags" type="string"></element>
-  <element name="content" type="string"></element>  
+  <element name="content" type="nxs:clob"></element>
   <element name="isRichtext" type="boolean" default="true" />
   <element name="theme" type="string" default="sites"/>
   <element name="themePage" type="string" default="page"/>
