@@ -16,7 +16,6 @@
       <label>WebSite</label>
       <icon>/icons/website.png</icon>
       <bigIcon>/icons/website_100.png</bigIcon>
-      <icon-expanded>/icons/website.png</icon-expanded>
       <category>Collaborative</category>
       <description>WebSite.description</description>
       <default-view>view_documents</default-view>
@@ -45,7 +44,6 @@
       <label>WebPage</label>
       <icon>/icons/webpage.png</icon>
       <bigIcon>/icons/webpage_100.png</bigIcon>
-      <icon-expanded>/icons/webpage.png</icon-expanded>
       <category>SimpleDocument</category>
       <description>WebPage.description</description>
       <default-view>view_documents</default-view>

@@ -17,7 +17,6 @@
       <label>BlogSite</label>
       <icon>/icons/blog_folder.png</icon>
       <bigIcon>/icons/blogsite_100.png</bigIcon>
-      <icon-expanded>/icons/blogsite_100.png</icon-expanded>
       <category>Collaborative</category>
       <description>BlogSite.description</description>
       <default-view>view_documents</default-view>
@@ -49,7 +48,6 @@
       <label>BlogPost</label>
       <icon>/icons/blogpage.png</icon>
       <bigIcon>/icons/blogpage_100.png</bigIcon>
-      <icon-expanded>/icons/blogpage.png</icon-expanded>
       <category>SimpleDocument</category>
       <description>BlogPost.description</description>
       <default-view>view_documents</default-view>
