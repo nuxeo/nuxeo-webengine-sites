@@ -25,7 +25,6 @@ import javax.ws.rs.core.Response;
 
 import org.nuxeo.common.utils.Path;
 import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.rest.DocumentObject;
@@ -94,8 +93,7 @@ public class JsonAdapter extends DefaultAdapter {
 
     protected static DocumentModel getTreeRoot(DocumentModel doc) {
         if (doc != null) {
-            CoreSession session = CoreInstance.getInstance().getSession(
-                    doc.getSessionId());
+            CoreSession session = doc.getCoreSession();
             DocumentModel parent = doc;
             while (parent != null) {
                 // Check for 'WebView' facet. This is enough since only
