@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
   targetNamespace="http://project.nuxeo.org/schemas/webengine/site/sites/webpage"
-  xmlns:nxs="http://project.nuxeo.org/schemas/webengine/site/wiki/webpage"
-  elementFormDefault="qualified">
+  xmlns:nxs="http://project.nuxeo.org/schemas/webengine/site/sites/webpage">
 
   <xs:simpleType name="clob">
     <xs:restriction base="xs:string">
@@ -10,13 +9,13 @@
     </xs:restriction>
   </xs:simpleType>
 
-  <element name="pushtomenu" type="boolean" default="true"></element>
-  <element name="template" type="string"></element>
-  <element name="tags" type="string"></element>
-  <element name="content" type="nxs:clob"></element>
-  <element name="isRichtext" type="boolean" default="true" />
-  <element name="theme" type="string" default="sites"/>
-  <element name="themePage" type="string" default="page"/>
-  <element name="themePerspective" type="string"/>
-  
-</schema>
+  <xs:element name="pushtomenu" type="xs:boolean" default="true" />
+  <xs:element name="template" type="xs:string" />
+  <xs:element name="tags" type="xs:string" />
+  <xs:element name="content" type="nxs:clob" />
+  <xs:element name="isRichtext" type="xs:boolean" default="true" />
+  <xs:element name="theme" type="xs:string" default="sites" />
+  <xs:element name="themePage" type="xs:string" default="page" />
+  <xs:element name="themePerspective" type="xs:string" />
+
+</xs:schema>
