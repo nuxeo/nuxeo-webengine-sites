@@ -66,10 +66,11 @@ public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
         super();
     }
 
-    public TestWebengineQuerySiteUtils(String name) {
+    protected TestWebengineQuerySiteUtils(String name) {
         super(name);
     }
 
+    @Override
     @Before
     public void setUp() throws Exception {
         String bundleFile = "org.nuxeo.ecm.platform.webengine.sites.tests";
@@ -89,6 +90,7 @@ public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
         initializeTestData();
     }
 
+    @Override
     @After
     public void tearDown() throws Exception {
         session.cancel();

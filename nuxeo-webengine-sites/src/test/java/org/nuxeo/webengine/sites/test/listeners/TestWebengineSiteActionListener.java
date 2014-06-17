@@ -41,10 +41,11 @@ public class TestWebengineSiteActionListener extends SQLRepositoryTestCase {
         super();
     }
 
-    public TestWebengineSiteActionListener(String name) {
+    protected TestWebengineSiteActionListener(String name) {
         super(name);
     }
 
+    @Override
     @Before
     public void setUp() throws Exception {
         String bundleFile = "org.nuxeo.ecm.platform.webengine.sites.tests";
@@ -57,6 +58,7 @@ public class TestWebengineSiteActionListener extends SQLRepositoryTestCase {
         openSession();
     }
 
+    @Override
     @After
     public void tearDown() throws Exception {
         closeSession();
