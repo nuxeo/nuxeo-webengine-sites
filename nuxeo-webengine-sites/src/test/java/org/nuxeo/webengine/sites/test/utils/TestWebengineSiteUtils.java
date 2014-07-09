@@ -18,16 +18,17 @@
 
 package org.nuxeo.webengine.sites.test.utils;
 
-import org.junit.Before;
-import org.junit.After;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.nuxeo.common.utils.IdUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.repository.jcr.testing.RepositoryOSGITestCase;
+import org.nuxeo.ecm.core.storage.sql.SQLRepositoryTestCase;
 import org.nuxeo.webengine.sites.utils.SiteConstants;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
@@ -37,8 +38,9 @@ import org.nuxeo.webengine.sites.utils.SiteUtils;
  * @author rux
  *
  */
-public class TestWebengineSiteUtils extends RepositoryOSGITestCase {
+public class TestWebengineSiteUtils extends SQLRepositoryTestCase {
 
+    @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
@@ -47,13 +49,13 @@ public class TestWebengineSiteUtils extends RepositoryOSGITestCase {
         deployBundle("org.nuxeo.ecm.platform.webengine.sites.core.contrib");
         deployBundle("org.nuxeo.ecm.platform.webengine.sites.tests");
 
-        openRepository();
+        openSession();
     }
 
+    @Override
     @After
     public void tearDown() throws Exception {
-        releaseCoreSession();
-        releaseRepository();
+        closeSession();
         super.tearDown();
     }
 
@@ -61,10 +63,7 @@ public class TestWebengineSiteUtils extends RepositoryOSGITestCase {
 
     private DocumentModel webSite;
 
-    private CoreSession session;
-
     protected void entryTest() throws Exception {
-        session = getCoreSession();
         String id = IdUtils.generatePathSegment(webSiteTitle);
         webSite = session.createDocumentModel("/", id, "WebSite");
         webSite.setPropertyValue("dc:title", webSiteTitle);
