@@ -15,6 +15,7 @@
 
 package org.nuxeo.webengine.blogs.adapters;
 
+import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.webengine.model.WebAdapter;
@@ -31,13 +32,13 @@ public class BlogCommentService extends WebCommentService {
 
     @Override
     protected DocumentModel createCommentDocument(CoreSession session,
-            DocumentModel target, DocumentModel comment) throws Exception {
+            DocumentModel target, DocumentModel comment) throws ClientException {
         return super.createCommentDocument(session, target, comment);
     }
 
     @Override
     protected void publishComment(CoreSession session, DocumentModel target,
-            DocumentModel comment) throws Exception {
+            DocumentModel comment) throws ClientException {
         super.publishComment(session, target, comment);
     }
 
