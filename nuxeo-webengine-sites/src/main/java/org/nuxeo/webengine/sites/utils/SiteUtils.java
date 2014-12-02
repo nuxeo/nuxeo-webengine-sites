@@ -58,7 +58,7 @@ public class SiteUtils {
     }
 
     public static Response getLogoResponse(DocumentModel document)
-            throws Exception {
+            throws ClientException {
         Blob blob = getBlob(document, SiteConstants.WEBCONTAINER_LOGO);
         if (blob != null) {
             return Response.ok().entity(blob).type(blob.getMimeType()).build();
@@ -70,7 +70,7 @@ public class SiteUtils {
      * Gets the first mini-site parent.
      */
     public static DocumentModel getFirstWebSiteParent(CoreSession session,
-            DocumentModel doc) throws Exception {
+            DocumentModel doc) throws ClientException {
         List<DocumentModel> parents = session.getParentDocuments(doc.getRef());
         Collections.reverse(parents);
         for (DocumentModel currentDocumentModel : parents) {
@@ -91,7 +91,7 @@ public class SiteUtils {
      * moderation is on).
      */
     public static int getNumberCommentsForPage(CoreSession session,
-            DocumentModel page) throws Exception {
+            DocumentModel page) throws ClientException {
         List<DocumentModel> comments = getCommentManager().getComments(page);
         if (isCurrentModerated(session, page)) {
             List<DocumentModel> publishedComments = new ArrayList<DocumentModel>();
@@ -111,8 +111,8 @@ public class SiteUtils {
      *
      * @return user first name + user last name
      */
-    public static String getUserDetails(String username) throws Exception {
-        UserManager userManager = getUserManager();
+    public static String getUserDetails(String username) throws ClientException {
+        UserManager userManager = Framework.getService(UserManager.class);
         NuxeoPrincipal principal = userManager.getPrincipal(username);
         if (principal == null) {
             return StringUtils.EMPTY;
@@ -153,7 +153,7 @@ public class SiteUtils {
         if (ws.hasSchema(SiteConstants.WEBCONTAINER_SCHEMA)) {
             try {
                 path.append(ws.getPropertyValue(SiteConstants.WEBCONTAINER_URL)).append("/");
-            } catch (Exception e) {
+            } catch (ClientException e) {
                 path.append(segment).append('/');
             }
         } else {
@@ -169,7 +169,7 @@ public class SiteUtils {
      */
     public static DocumentModel createDocument(HttpServletRequest request,
             CoreSession session, String parentPath, String documentType)
-            throws Exception {
+            throws ClientException {
         PathSegmentService pss = Framework.getService(PathSegmentService.class);
         String title = request.getParameter("title");
         String pageName = request.getParameter(SiteConstants.PAGE_NAME_ATTRIBUTE);
@@ -208,7 +208,7 @@ public class SiteUtils {
      * @return all users with a given permission for the corresponding workspace
      */
     public static ArrayList<String> getUsersWithPermission(CoreSession session,
-            DocumentModel doc, Set<String> permissions) throws Exception {
+            DocumentModel doc, Set<String> permissions) throws ClientException {
         DocumentModel parentWebSite = getFirstWebSiteParent(session, doc);
         if (parentWebSite != null) {
             String[] moderators = parentWebSite.getACP().listUsernamesForAnyPermission(
@@ -224,7 +224,7 @@ public class SiteUtils {
      *         moderationType is a priori
      */
     public static boolean isCurrentModerated(CoreSession session,
-            DocumentModel doc) throws Exception {
+            DocumentModel doc) throws ClientException {
         if (!getModerationType(session, doc).equals(
                 SiteConstants.MODERATION_APRIORI)) {
             // no moderation set
@@ -248,25 +248,13 @@ public class SiteUtils {
      * @return true if the current user is among moderators
      */
     public static boolean isModeratedByCurrentUser(CoreSession session,
-            DocumentModel doc) throws Exception {
+            DocumentModel doc) throws ClientException {
         return session.hasPermission(doc.getRef(),
                 SiteConstants.PERMISSION_MODERATE);
     }
 
-    public static CommentManager getCommentManager() throws Exception {
-        CommentManager commentManager = Framework.getService(CommentManager.class);
-        if (commentManager == null) {
-            throw new Exception("Unable to get commentManager");
-        }
-        return commentManager;
-    }
-
-    public static UserManager getUserManager() throws Exception {
-        UserManager userManager = Framework.getService(UserManager.class);
-        if (userManager == null) {
-            throw new Exception("unable to get userManager");
-        }
-        return userManager;
+    public static CommentManager getCommentManager() {
+        return Framework.getService(CommentManager.class);
     }
 
     /**
@@ -274,10 +262,9 @@ public class SiteUtils {
      *
      * @param comment
      * @return the <b>WebPage</b>
-     * @throws Exception
      */
     public static DocumentModel getPageForComment(DocumentModel comment)
-            throws Exception {
+            throws ClientException {
         List<DocumentModel> list = getCommentManager().getDocumentsForComment(
                 comment);
         if (!list.isEmpty()) {
@@ -293,7 +280,7 @@ public class SiteUtils {
      * @return all the moderators for the corresponding workspace
      */
     public static ArrayList<String> getModerators(CoreSession session,
-            DocumentModel doc) throws Exception {
+            DocumentModel doc) throws ClientException {
         Set<String> moderatePermissions = new HashSet<String>();
         moderatePermissions.addAll(Arrays.asList(session.getPermissionsToCheck(SiteConstants.PERMISSION_MODERATE)));
         return getUsersWithPermission(session, doc, moderatePermissions);
@@ -304,7 +291,7 @@ public class SiteUtils {
      *         aposteriori
      */
     public static String getModerationType(CoreSession session,
-            DocumentModel doc) throws Exception {
+            DocumentModel doc) throws ClientException {
         DocumentModel parentWebSite = getFirstWebSiteParent(session, doc);
         if (parentWebSite != null) {
             return getString(parentWebSite,

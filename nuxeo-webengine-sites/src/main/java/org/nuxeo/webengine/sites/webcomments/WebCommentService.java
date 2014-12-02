@@ -17,6 +17,7 @@ package org.nuxeo.webengine.sites.webcomments;
 
 import java.util.ArrayList;
 
+import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.rest.CommentService;
@@ -34,7 +35,7 @@ public class WebCommentService extends CommentService {
 
     @Override
     protected DocumentModel createCommentDocument(CoreSession session,
-            DocumentModel target, DocumentModel comment) throws Exception {
+            DocumentModel target, DocumentModel comment) throws ClientException {
         DocumentModel site = SiteUtils.getFirstWebSiteParent(session, target);
         if (site == null) {
             return super.createCommentDocument(session, target, comment);
@@ -46,7 +47,7 @@ public class WebCommentService extends CommentService {
 
     @Override
     protected void publishComment(CoreSession session, DocumentModel target,
-            DocumentModel comment) throws Exception {
+            DocumentModel comment) throws ClientException {
         //CommentsModerationService commentsModerationService = getCommentsModerationService();
         if (SiteUtils.isCurrentModerated(session, target)
                 && !SiteUtils.isModeratedByCurrentUser(session, target)) {
