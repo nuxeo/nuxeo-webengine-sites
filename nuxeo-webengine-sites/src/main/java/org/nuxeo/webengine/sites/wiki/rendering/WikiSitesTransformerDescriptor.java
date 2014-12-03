@@ -55,7 +55,7 @@ public class WikiSitesTransformerDescriptor extends
     protected List<WikiSitesFilterDescriptor> filters;
 
     @Override
-    public WikiTransformer newInstance() throws Exception {
+    public WikiTransformer newInstance() throws ReflectiveOperationException {
         WikiTransformer tr;
         if (serializerClass == null) {
             tr = new WikiTransformer();
