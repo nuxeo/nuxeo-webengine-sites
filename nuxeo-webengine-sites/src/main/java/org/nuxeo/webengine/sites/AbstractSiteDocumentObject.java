@@ -105,8 +105,7 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
         }
         try {
             if (LifeCycleConstants.DELETED_STATE.equals(doc.getCurrentLifeCycleState())) {
-                return getTemplate(getDocumentDeletedErrorTemplateName()).args(
-                        getErrorArguments());
+                return getTemplate(getDocumentDeletedErrorTemplateName()).args(getErrorArguments());
             }
         } catch (ClientException e1) {
             throw WebException.wrap(e1);
@@ -138,8 +137,7 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
         }
         // return a default image, maybe you want to change this in future
         if (resp == null) {
-            resp = redirect(getContext().getModule().getSkinPathPrefix()
-                    + "/images/logo.gif");
+            resp = redirect(getContext().getModule().getSkinPathPrefix() + "/images/logo.gif");
         }
         return resp;
     }
@@ -153,8 +151,7 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
         Response resp = null;
         try {
             DocumentModel parentWebSite = getParentWebSite(ctx.getCoreSession());
-            Blob blob = SiteUtils.getBlob(parentWebSite,
-                    WEBCONTAINER_WELCOMEMEDIA);
+            Blob blob = SiteUtils.getBlob(parentWebSite, WEBCONTAINER_WELCOMEMEDIA);
             if (blob != null) {
                 resp = Response.ok().entity(blob).type(blob.getMimeType()).build();
             }
@@ -163,8 +160,7 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
         }
         // return a default image, maybe you want to change this in future
         if (resp == null) {
-            resp = redirect(getContext().getModule().getSkinPathPrefix()
-                    + "/images/logo.gif");
+            resp = redirect(getContext().getModule().getSkinPathPrefix() + "/images/logo.gif");
         }
         return resp;
     }
@@ -190,8 +186,7 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
     }
 
     /**
-     * Method called before a search operation is made for the context of the
-     * current web object.
+     * Method called before a search operation is made for the context of the current web object.
      */
     @GET
     @Path("search")
@@ -205,8 +200,8 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
     }
 
     /**
-     * JAX-RS specs doesn't allow multiple REST designator on a single method so
-     * we need to use another method to do a POST.
+     * JAX-RS specs doesn't allow multiple REST designator on a single method so we need to use another method to do a
+     * POST.
      */
     @POST
     @Path("search")
@@ -223,11 +218,9 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
             if (e instanceof WebResourceNotFoundException) {
                 CoreSession session = ctx.getCoreSession();
                 try {
-                    if (session.hasPermission(doc.getRef(),
-                            PERMISSION_ADD_CHILDREN)) {
+                    if (session.hasPermission(doc.getRef(), PERMISSION_ADD_CHILDREN)) {
                         DocumentObject parent = (DocumentObject) ctx.getTargetObject();
-                        ctx.getRequest().setAttribute(THEME_PERSPECTIVE,
-                                "create");
+                        ctx.getRequest().setAttribute(THEME_PERSPECTIVE, "create");
                         ctx.getRequest().setAttribute(PAGE_NAME_ATTRIBUTE, path);
                         return parent;
                     } else {
@@ -250,13 +243,12 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
     public Object createWebPage() {
         try {
             CoreSession session = ctx.getCoreSession();
-            DocumentModel createdDocument = SiteUtils.createDocument(
-                    ctx.getRequest(), session, doc.getPathAsString(),
+            DocumentModel createdDocument = SiteUtils.createDocument(ctx.getRequest(), session, doc.getPathAsString(),
                     getWebPageDocumentType());
             DocumentModel parentWebSite = getParentWebSite(session);
             String path = SiteUtils.getPagePath(parentWebSite, createdDocument);
             return redirect(path.toString());
-            //return redirect(URIUtils.quoteURIPathComponent(path, false));
+            // return redirect(URIUtils.quoteURIPathComponent(path, false));
         } catch (Exception e) {
             throw WebException.wrap(e);
         }
@@ -272,8 +264,7 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
     public Object getHomePagePath() {
         try {
             DocumentModel parentWebSite = getParentWebSite(ctx.getCoreSession());
-            StringBuilder path = new StringBuilder(
-                    SiteUtils.getWebContainersPath()).append("/");
+            StringBuilder path = new StringBuilder(SiteUtils.getWebContainersPath()).append("/");
             path.append(SiteUtils.getString(parentWebSite, WEBCONTAINER_URL));
             return redirect(path.toString());
         } catch (Exception e) {
@@ -297,19 +288,16 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
     public Response doDelete() {
         CoreSession session = ctx.getCoreSession();
         try {
-            DocumentModel webContainer = SiteUtils.getFirstWebSiteParent(
-                    session, doc);
+            DocumentModel webContainer = SiteUtils.getFirstWebSiteParent(session, doc);
             DocumentRef docRef = doc.getRef();
-            if (session.getAllowedStateTransitions(docRef).contains(
-                    LifeCycleConstants.DELETE_TRANSITION)) {
-                session.followTransition(docRef,
-                        LifeCycleConstants.DELETE_TRANSITION);
+            if (session.getAllowedStateTransitions(docRef).contains(LifeCycleConstants.DELETE_TRANSITION)) {
+                session.followTransition(docRef, LifeCycleConstants.DELETE_TRANSITION);
             } else {
                 session.removeDocument(docRef);
             }
             session.save();
 
-            return redirect( SiteUtils.getPagePath(webContainer, webContainer));
+            return redirect(SiteUtils.getPagePath(webContainer, webContainer));
         } catch (Exception e) {
             throw WebException.wrap(e);
         }
@@ -334,26 +322,22 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
      */
     protected void setSearchParameters() {
         ctx.getRequest().setAttribute(THEME_BUNDLE, getSearchThemePage());
-        ctx.setProperty(SEARCH_PARAM, ctx.getRequest().getParameter(
-                "searchParam"));
+        ctx.setProperty(SEARCH_PARAM, ctx.getRequest().getParameter("searchParam"));
         ctx.setProperty(SEARCH_PARAM_DOC_TYPE, getWebPageDocumentType());
     }
 
     /**
-     * Returns the map with the arguments that will be used to generate the
-     * default template page for the current web object.
+     * Returns the map with the arguments that will be used to generate the default template page for the current web
+     * object.
      */
     protected Map<String, Object> getArguments() throws Exception {
 
         Map<String, Object> root = new HashMap<String, Object>();
         DocumentModel parentWebSite = getParentWebSite(getCoreSession());
 
-        root.put(PAGE_NAME, SiteUtils.getString(parentWebSite,
-                WEBCONTAINER_NAME, ""));
-        root.put(SITE_DESCRIPTION, SiteUtils.getString(parentWebSite,
-                WEBCONTAINER_BASELINE, ""));
-        root.put(EMAIL, "mailto:"
-                + SiteUtils.getString(parentWebSite, WEBCONTAINER_EMAIL, ""));
+        root.put(PAGE_NAME, SiteUtils.getString(parentWebSite, WEBCONTAINER_NAME, ""));
+        root.put(SITE_DESCRIPTION, SiteUtils.getString(parentWebSite, WEBCONTAINER_BASELINE, ""));
+        root.put(EMAIL, "mailto:" + SiteUtils.getString(parentWebSite, WEBCONTAINER_EMAIL, ""));
         // specific only for Page web object
         MimetypeRegistry mimetypeService = Framework.getService(MimetypeRegistry.class);
         root.put("mimetypeService", mimetypeService);
@@ -361,21 +345,17 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
     }
 
     /**
-     * Sets the parameters that will be needed in order to execute the GET
-     * requests on the current web object.
+     * Sets the parameters that will be needed in order to execute the GET requests on the current web object.
      */
     protected void setDoGetParameters() {
         // getting theme config from document.
-        String theme = SiteUtils.getString(doc, getSchemaFieldThemeName(),
-                getDefaultSchemaFieldThemeValue());
-        String themePage = SiteUtils.getString(doc,
-                getSchemaFieldThemePageName(),
+        String theme = SiteUtils.getString(doc, getSchemaFieldThemeName(), getDefaultSchemaFieldThemeValue());
+        String themePage = SiteUtils.getString(doc, getSchemaFieldThemePageName(),
                 getDefaultSchemaFieldThemePageValue());
 
         ctx.getRequest().setAttribute(THEME_BUNDLE, theme + "/" + themePage);
 
-        String currentPerspective = (String) ctx.getRequest().getAttribute(
-                THEME_PERSPECTIVE);
+        String currentPerspective = (String) ctx.getRequest().getAttribute(THEME_PERSPECTIVE);
         if (StringUtils.isEmpty(currentPerspective)) {
             // Set view perspective if none present.
             ctx.getRequest().setAttribute(THEME_PERSPECTIVE, VIEW_PERSPECTIVE);
@@ -388,8 +368,7 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
      * @param session the nuxeo core session
      * @return the parent web site of the current web object
      */
-    protected DocumentModel getParentWebSite(CoreSession session)
-            throws Exception {
+    protected DocumentModel getParentWebSite(CoreSession session) throws Exception {
         DocumentModel parentWebSite = null;
         if (!doc.hasFacet(SiteConstants.WEB_VIEW_FACET)) {
             parentWebSite = SiteUtils.getFirstWebSiteParent(session, doc);
@@ -405,14 +384,12 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
     protected abstract String getSearchThemePage();
 
     /**
-     * Returns the schema name plus field name which together keep the theme for
-     * the current web object.
+     * Returns the schema name plus field name which together keep the theme for the current web object.
      */
     protected abstract String getSchemaFieldThemeName();
 
     /**
-     * Returns the schema name plus field name which together keep the theme
-     * page for the current web object.
+     * Returns the schema name plus field name which together keep the theme page for the current web object.
      */
     protected abstract String getSchemaFieldThemePageName();
 
@@ -427,40 +404,33 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
     protected abstract String getDefaultSchemaFieldThemePageValue();
 
     /**
-     * Returns the name of the template that will be used in case the
-     * DocumentModel for the current web object is null.
+     * Returns the name of the template that will be used in case the DocumentModel for the current web object is null.
      */
     protected abstract String getErrorTemplateName();
 
     /**
-     * Returns the name of the template that will be used in case the
-     * DocumentModel is in "deleted" state
+     * Returns the name of the template that will be used in case the DocumentModel is in "deleted" state
      */
     protected abstract String getDocumentDeletedErrorTemplateName();
 
     /**
-     * Returns the map with the arguments that will be used to generate the
-     * error template page.
+     * Returns the map with the arguments that will be used to generate the error template page.
      */
     protected abstract Map<String, Object> getErrorArguments();
 
-    protected Response handleAnonymousRedirectToLogout(
-            HttpServletRequest request) {
+    protected Response handleAnonymousRedirectToLogout(HttpServletRequest request) {
         Map<String, String> urlParameters = new HashMap<String, String>();
         urlParameters.put(NXAuthConstants.SECURITY_ERROR, "true");
         urlParameters.put(NXAuthConstants.FORCE_ANONYMOUS_LOGIN, "true");
         if (request.getAttribute(NXAuthConstants.REQUESTED_URL) != null) {
-            urlParameters.put(
-                    NXAuthConstants.REQUESTED_URL,
+            urlParameters.put(NXAuthConstants.REQUESTED_URL,
                     (String) request.getAttribute(NXAuthConstants.REQUESTED_URL));
         } else {
-            urlParameters.put(NXAuthConstants.REQUESTED_URL,
-                    NuxeoAuthenticationFilter.getRequestedUrl(request));
+            urlParameters.put(NXAuthConstants.REQUESTED_URL, NuxeoAuthenticationFilter.getRequestedUrl(request));
         }
         String baseURL = "";
         try {
-            baseURL = initAuthenticationService().getBaseURL(request)
-                    + NXAuthConstants.LOGOUT_PAGE;
+            baseURL = initAuthenticationService().getBaseURL(request) + NXAuthConstants.LOGOUT_PAGE;
         } catch (ClientException e) {
             throw WebException.wrap(e);
         }
@@ -474,15 +444,12 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
         this.forceRedirectToLogout = redirectToLogout;
     }
 
-    protected PluggableAuthenticationService initAuthenticationService()
-            throws ClientException {
+    protected PluggableAuthenticationService initAuthenticationService() throws ClientException {
         PluggableAuthenticationService service = (PluggableAuthenticationService) Framework.getRuntime().getComponent(
                 PluggableAuthenticationService.NAME);
         if (service == null) {
-            log.error("Unable to get Service "
-                    + PluggableAuthenticationService.NAME);
-            throw new ClientException(
-                    "Can't initialize Nuxeo Pluggable Authentication Service");
+            log.error("Unable to get Service " + PluggableAuthenticationService.NAME);
+            throw new ClientException("Can't initialize Nuxeo Pluggable Authentication Service");
         }
         return service;
     }

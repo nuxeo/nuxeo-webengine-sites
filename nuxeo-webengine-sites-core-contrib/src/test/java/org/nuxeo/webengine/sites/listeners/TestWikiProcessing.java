@@ -38,13 +38,12 @@ public class TestWikiProcessing extends NXRuntimeTestCase {
 
     @Test
     public void testProcessing() throws Exception {
-        InputStream is = new FileInputStream(FileUtils
-                .getResourceFileFromContext("test-data/page1.wiki"));
+        InputStream is = new FileInputStream(FileUtils.getResourceFileFromContext("test-data/page1.wiki"));
         String wikiInput = FileUtils.read(is);
         SitesWikiListener listener = new SitesWikiListener();
 
-        WikiProcessingResult result = listener.processWikiContent(wikiInput,
-                "/nuxeo/site/sites", "/nuxeo/site/sites/mypage");
+        WikiProcessingResult result = listener.processWikiContent(wikiInput, "/nuxeo/site/sites",
+                "/nuxeo/site/sites/mypage");
         List<String> relations = result.getRelationLinks();
 
         List<String> expected = Lists.newArrayList("/nuxeo/site/sites/mypage/WikiPage1",
@@ -52,8 +51,8 @@ public class TestWikiProcessing extends NXRuntimeTestCase {
         assertTrue(relations.containsAll(expected));
 
         String content = result.getWikiContent().trim();
-        WikiProcessingResult result2 = listener.processWikiContent(content,
-                "/nuxeo/site/sites", "/nuxeo/site/sites/mypage");
+        WikiProcessingResult result2 = listener.processWikiContent(content, "/nuxeo/site/sites",
+                "/nuxeo/site/sites/mypage");
         String content2 = result2.getWikiContent().trim();
         assertEquals(content, content2);
     }

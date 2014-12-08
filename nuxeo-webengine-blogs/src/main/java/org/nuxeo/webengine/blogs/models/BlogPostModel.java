@@ -17,8 +17,7 @@ package org.nuxeo.webengine.blogs.models;
 import org.nuxeo.theme.models.AbstractModel;
 
 /**
- * Model related to the <b>BlogPost</b>-s in the fragment initialization
- * mechanism.
+ * Model related to the <b>BlogPost</b>-s in the fragment initialization mechanism.
  *
  * @author rux
  */
@@ -39,8 +38,7 @@ public class BlogPostModel extends AbstractModel {
         this.path = path;
     }
 
-    public BlogPostModel(String title, String path, String description,
-            String content, String author) {
+    public BlogPostModel(String title, String path, String description, String content, String author) {
         this(title, path);
         this.description = description;
         this.content = content;

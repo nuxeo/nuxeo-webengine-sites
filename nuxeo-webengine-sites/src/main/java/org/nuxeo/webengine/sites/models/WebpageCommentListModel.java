@@ -19,8 +19,8 @@ package org.nuxeo.webengine.sites.models;
 import org.nuxeo.theme.models.AbstractModel;
 
 /**
- * Model related to the comments that are last added under a <b>WebPage</b>
- * under a <b>WebSite</b>, in the fragment initialization mechanism.
+ * Model related to the comments that are last added under a <b>WebPage</b> under a <b>WebSite</b>, in the fragment
+ * initialization mechanism.
  *
  * @author rux
  */

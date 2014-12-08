@@ -19,10 +19,8 @@ package org.nuxeo.webengine.sites.models;
 import org.nuxeo.theme.models.AbstractModel;
 
 /**
- * Model related to searching a certain webPage between all the pages under a
- * <b>WebSite</b> that contains in title, description , main content or
- * attached files the given searchParam. in the fragment initialization
- * mechanism.
+ * Model related to searching a certain webPage between all the pages under a <b>WebSite</b> that contains in title,
+ * description , main content or attached files the given searchParam. in the fragment initialization mechanism.
  *
  * @author rux
  */

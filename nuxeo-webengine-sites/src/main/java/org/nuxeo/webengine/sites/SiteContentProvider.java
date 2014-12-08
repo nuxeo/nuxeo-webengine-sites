@@ -48,10 +48,9 @@ public class SiteContentProvider extends DocumentContentProvider {
     public Object[] getChildren(Object obj) {
         DocumentModel parent = (DocumentModel) obj;
 
-        String query = "SELECT * FROM Document WHERE ecm:parentId = '"
-                + parent.getId()
-                + "' AND "
-                + SiteConstants.WEBPAGE_PUSHTOMENU + " = 1 AND ecm:currentLifeCycleState != 'deleted' ORDER BY dc:title";
+        String query = "SELECT * FROM Document WHERE ecm:parentId = '" + parent.getId() + "' AND "
+                + SiteConstants.WEBPAGE_PUSHTOMENU
+                + " = 1 AND ecm:currentLifeCycleState != 'deleted' ORDER BY dc:title";
         try {
             DocumentModelList docs = session.query(query);
             return docs.toArray();

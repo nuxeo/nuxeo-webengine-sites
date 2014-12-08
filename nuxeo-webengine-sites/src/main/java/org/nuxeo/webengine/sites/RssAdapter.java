@@ -73,29 +73,24 @@ public class RssAdapter extends DefaultAdapter {
 
             DocumentModel doc = session.getDocument(new IdRef(docId));
 
-            DocumentModelList paged = SiteQueriesCollection.queryLastModifiedPages(
-                    session, doc.getPathAsString(), getWebPageDocumentType(),
-                    NO_PAGES);
+            DocumentModelList paged = SiteQueriesCollection.queryLastModifiedPages(session, doc.getPathAsString(),
+                    getWebPageDocumentType(), NO_PAGES);
             for (DocumentModel documentModel : paged) {
                 StringBuilder path = new StringBuilder(baseUrl);
                 String pagePath = null;
                 if (doc.getType().equals(getWebSiteDocumentType())) {
-                    pagePath = new String(path.append(SiteUtils.getPagePath(
-                            doc, documentModel)));
+                    pagePath = new String(path.append(SiteUtils.getPagePath(doc, documentModel)));
                 } else if (doc.getType().equals(getWebPageDocumentType())) {
                     pagePath = new String(baseUrl.append(SiteUtils.getPagePath(
-                            SiteUtils.getFirstWebSiteParent(session, doc),
-                            documentModel)));
+                            SiteUtils.getFirstWebSiteParent(session, doc), documentModel)));
                 }
-                WebpageModel wpmodel = new WebpageModel(
-                        documentModel.getName(), pagePath);
+                WebpageModel wpmodel = new WebpageModel(documentModel.getName(), pagePath);
                 wpmodel.setDescription((String) documentModel.getPropertyValue(WEBPAGE_DESCRIPTION));
                 String entryXml = rssEntryTpl.arg("item", wpmodel).render();
                 entries.add(entryXml);
             }
-            return getTemplate("rss_feed.ftl").args(
-                    SiteUtils.getRssFeedArguments(ctx,
-                            "title.last.published.pages")).arg("items", entries);
+            return getTemplate("rss_feed.ftl").args(SiteUtils.getRssFeedArguments(ctx, "title.last.published.pages")).arg(
+                    "items", entries);
         } catch (Exception e) {
             throw WebException.wrap(e);
         }
@@ -120,42 +115,33 @@ public class RssAdapter extends DefaultAdapter {
 
             StringBuilder path = new StringBuilder(ctx.getServerURL());
             if (doc.getType().equals(getWebSiteDocumentType())) {
-                comments = SiteQueriesCollection.queryLastComments(session,
-                        doc.getPathAsString(), NO_COMMENTS,
+                comments = SiteQueriesCollection.queryLastComments(session, doc.getPathAsString(), NO_COMMENTS,
                         SiteUtils.isCurrentModerated(session, doc));
-                path.append(SiteUtils.getPagePath(doc,
-                        doc));
+                path.append(SiteUtils.getPagePath(doc, doc));
             } else if (doc.getType().equals(getWebPageDocumentType())) {
                 CommentManager commentManager = SiteUtils.getCommentManager();
-                comments = new DocumentModelListImpl(
-                        commentManager.getComments(doc));
-                path.append(SiteUtils.getPagePath(
-                        SiteUtils.getFirstWebSiteParent(session, doc), doc));
+                comments = new DocumentModelListImpl(commentManager.getComments(doc));
+                path.append(SiteUtils.getPagePath(SiteUtils.getFirstWebSiteParent(session, doc), doc));
             }
 
             for (DocumentModel documentModel : comments) {
                 if (PUBLISHED_STATE.equals(documentModel.getCurrentLifeCycleState())) {
                     GregorianCalendar modificationDate = (GregorianCalendar) documentModel.getProperty(
                             COMMENT_CREATION_DATE).getValue();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-                            "dd MMMM", WebEngine.getActiveContext().getLocale());
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM",
+                            WebEngine.getActiveContext().getLocale());
                     String creationDate = simpleDateFormat.format(modificationDate.getTime());
-                    String author = (String) documentModel.getProperty(
-                            COMMENT_AUTHOR).getValue();
-                    String commentText = (String) documentModel.getProperty(
-                            COMMENT_TEXT).getValue();
-                    CommentModel commentModel = new CommentModel(creationDate,
-                            author, commentText,
+                    String author = (String) documentModel.getProperty(COMMENT_AUTHOR).getValue();
+                    String commentText = (String) documentModel.getProperty(COMMENT_TEXT).getValue();
+                    CommentModel commentModel = new CommentModel(creationDate, author, commentText,
                             documentModel.getRef().toString(), false);
                     commentModel.setSiteUrl(path.toString());
                     String entryXml = rssEntryTpl.arg("item", commentModel).render();
                     entries.add(entryXml);
                 }
             }
-            return getTemplate("rss_feed.ftl").args(
-                    SiteUtils.getRssFeedArguments(ctx,
-                            "title.last.published.comments")).arg("items",
-                    entries);
+            return getTemplate("rss_feed.ftl").args(SiteUtils.getRssFeedArguments(ctx, "title.last.published.comments")).arg(
+                    "items", entries);
         } catch (Exception e) {
             throw WebException.wrap(e);
         }
@@ -163,8 +149,7 @@ public class RssAdapter extends DefaultAdapter {
 
     private String getWebSiteDocumentType() throws ClientException {
         try {
-            return (String) getTarget().getClass().getMethod(
-                    "getWebSiteDocumentType").invoke(getTarget());
+            return (String) getTarget().getClass().getMethod("getWebSiteDocumentType").invoke(getTarget());
         } catch (Exception e) {
             throw new ClientException(e);
         }
@@ -172,8 +157,7 @@ public class RssAdapter extends DefaultAdapter {
 
     private String getWebPageDocumentType() throws ClientException {
         try {
-            return (String) getTarget().getClass().getMethod(
-                    "getWebPageDocumentType").invoke(getTarget());
+            return (String) getTarget().getClass().getMethod("getWebPageDocumentType").invoke(getTarget());
         } catch (Exception e) {
             throw new ClientException(e);
         }

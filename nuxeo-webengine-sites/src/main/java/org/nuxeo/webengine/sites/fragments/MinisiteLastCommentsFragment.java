@@ -33,20 +33,19 @@ import org.nuxeo.webengine.sites.utils.SiteQueriesCollection;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
 /**
- * Action fragment for initializing the fragment related to retrieving a certain
- * number of comments that are last added under a <b>WebPage</b> under a
- * <b>WebSite</b>.
+ * Action fragment for initializing the fragment related to retrieving a certain number of comments that are last added
+ * under a <b>WebPage</b> under a <b>WebSite</b>.
  *
  * @author rux
  */
 public class MinisiteLastCommentsFragment extends AbstractFragment {
 
     private int noComments = 5;
+
     private int noWordsFromContent = 50;
 
     /**
-     * Retrieves a certain number of comments that are last added under a
-     * <b>WebPage</b> under a <b>WebSite</b>.
+     * Retrieves a certain number of comments that are last added under a <b>WebPage</b> under a <b>WebSite</b>.
      */
     @Override
     public Model getModel() throws ModelException {
@@ -54,40 +53,33 @@ public class MinisiteLastCommentsFragment extends AbstractFragment {
         if (WebEngine.getActiveContext() != null) {
             WebContext ctx = WebEngine.getActiveContext();
             CoreSession session = ctx.getCoreSession();
-            DocumentModel documentModel = ctx.getTargetObject().getAdapter(
-                    DocumentModel.class);
+            DocumentModel documentModel = ctx.getTargetObject().getAdapter(DocumentModel.class);
 
             try {
-                DocumentModel ws = SiteUtils.getFirstWebSiteParent(session,
-                        documentModel);
-                DocumentModelList comments = SiteQueriesCollection.queryLastComments(
-                        session, ws.getPathAsString(), noComments,
-                        SiteUtils.isCurrentModerated(session, ws));
+                DocumentModel ws = SiteUtils.getFirstWebSiteParent(session, documentModel);
+                DocumentModelList comments = SiteQueriesCollection.queryLastComments(session, ws.getPathAsString(),
+                        noComments, SiteUtils.isCurrentModerated(session, ws));
 
                 String pageTitle = null;
                 String pagePath = null;
                 for (DocumentModel comment : comments) {
                     DocumentModel parentPage = SiteUtils.getPageForComment(comment);
-                    String author = SiteUtils.getUserDetails(SiteUtils.getString(
-                            comment, "comment:author"));
+                    String author = SiteUtils.getUserDetails(SiteUtils.getString(comment, "comment:author"));
                     if (parentPage != null) {
                         pageTitle = parentPage.getTitle();
                         pagePath = JsonAdapter.getRelativePath(ws, parentPage).toString();
                     }
-                    String content = SiteUtils.getFistNWordsFromString(
-                            SiteUtils.getString(comment, "comment:text"),
+                    String content = SiteUtils.getFistNWordsFromString(SiteUtils.getString(comment, "comment:text"),
                             noWordsFromContent);
 
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM",
                             WebEngine.getActiveContext().getLocale());
-                    String formattedString = simpleDateFormat.format(SiteUtils.getGregorianCalendar(
-                            comment, "comment:creationDate").getTime());
+                    String formattedString = simpleDateFormat.format(SiteUtils.getGregorianCalendar(comment,
+                            "comment:creationDate").getTime());
                     String[] splitFormattedString = formattedString.split(" ");
 
-                    WebpageCommentModel webpageCommentModel = new WebpageCommentModel(pageTitle,
-                            pagePath, content, author,
-                            splitFormattedString[0],
-                            splitFormattedString[1]);
+                    WebpageCommentModel webpageCommentModel = new WebpageCommentModel(pageTitle, pagePath, content,
+                            author, splitFormattedString[0], splitFormattedString[1]);
 
                     model.addItem(webpageCommentModel);
                 }

@@ -40,8 +40,7 @@ public class PerspectiveAdapter extends DefaultAdapter {
     public Object changePerspective(@PathParam("path") String perspective) {
         try {
             DocumentObject documentObject = (DocumentObject) getTarget();
-            ctx.getRequest().setAttribute(SiteConstants.THEME_PERSPECTIVE,
-                    perspective);
+            ctx.getRequest().setAttribute(SiteConstants.THEME_PERSPECTIVE, perspective);
             return documentObject.doGet();
         } catch (Exception e) {
             throw WebException.wrap(e);

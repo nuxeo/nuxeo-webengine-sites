@@ -45,7 +45,6 @@ import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.ui.web.util.ComponentUtils;
 import org.nuxeo.runtime.api.Framework;
 
-
 /**
  * Performs re-rendering of webcontainer layout widgets.
  *
@@ -69,14 +68,11 @@ public class SiteActionsBean {
     protected static final String WEBBLOG = "BlogSite";
 
     /**
-     * Validates the web container fields. If the workspace is web container, it
-     * also needs to have name. The usual required JSF component can't be used,
-     * because it will block the validation no matter if the checkbox is set or
-     * not. As result, the widget validation is used. The both values need to be
-     * available in layout to be used.
+     * Validates the web container fields. If the workspace is web container, it also needs to have name. The usual
+     * required JSF component can't be used, because it will block the validation no matter if the checkbox is set or
+     * not. As result, the widget validation is used. The both values need to be available in layout to be used.
      */
-    public void validateName(FacesContext context, UIComponent component,
-            Object value) {
+    public void validateName(FacesContext context, UIComponent component, Object value) {
 
         Map<String, Object> attributes = component.getAttributes();
 
@@ -117,27 +113,22 @@ public class SiteActionsBean {
         Object nameObj = nameComp.getLocalValue();
 
         if (nameObj == null || StringUtils.isBlank(nameObj.toString())) {
-            FacesMessage message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, ComponentUtils.translate(
-                            context, "label.error.need.name.webcontainer"),
-                            null);
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, ComponentUtils.translate(context,
+                    "label.error.need.name.webcontainer"), null);
             throw new ValidatorException(message);
         }
 
     }
 
-    public void validateSiteTitle(FacesContext context, UIComponent component,
-            Object value) {
+    public void validateSiteTitle(FacesContext context, UIComponent component, Object value) {
         validateSite(context, component, value, WEBSITE);
     }
 
-    public void validateBlogTitle(FacesContext context, UIComponent component,
-            Object value) {
+    public void validateBlogTitle(FacesContext context, UIComponent component, Object value) {
         validateSite(context, component, value, WEBBLOG);
     }
 
-    private void validateSite(FacesContext context, UIComponent component,
-            Object value, String siteType) {
+    private void validateSite(FacesContext context, UIComponent component, Object value, String siteType) {
         if (value instanceof String) {
             try {
                 // apply Title2Path translation
@@ -151,18 +142,15 @@ public class SiteActionsBean {
                 fakeDoc.setPropertyValue("dc:title", (String) value);
                 String name = pss.generatePathSegment(fakeDoc);
 
-                DocumentModelList sites = querySitesByUrlAndDocType(
-                        documentManager, name, siteType);
+                DocumentModelList sites = querySitesByUrlAndDocType(documentManager, name, siteType);
                 // if editing a site don't verify it's unique against itself
                 DocumentModel currentDocument = navigationContext.getCurrentDocument();
                 if (siteType.equals(currentDocument.getType())) {
                     sites.remove(currentDocument);
                 }
                 if (!sites.isEmpty()) {
-                    FacesMessage message = new FacesMessage(
-                            FacesMessage.SEVERITY_ERROR,
-                            ComponentUtils.translate(context, "label.site.notunique.title"),
-                            null);
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, ComponentUtils.translate(
+                            context, "label.site.notunique.title"), null);
                     // also add global message
                     context.addMessage(null, message);
                     throw new ValidatorException(message);
@@ -173,10 +161,9 @@ public class SiteActionsBean {
         }
     }
 
-    private DocumentModelList querySitesByUrlAndDocType(CoreSession session,
-            String url, String documentType) throws ClientException {
-        QuerySitesUnrestricted unrestrictedRunner = new QuerySitesUnrestricted(
-                session, documentType, url);
+    private DocumentModelList querySitesByUrlAndDocType(CoreSession session, String url, String documentType)
+            throws ClientException {
+        QuerySitesUnrestricted unrestrictedRunner = new QuerySitesUnrestricted(session, documentType, url);
         unrestrictedRunner.runUnrestricted();
         return unrestrictedRunner.getResultList();
     }
@@ -189,8 +176,7 @@ public class SiteActionsBean {
 
         private DocumentModelList list;
 
-        public QuerySitesUnrestricted(CoreSession session, String documentType,
-                String url) {
+        public QuerySitesUnrestricted(CoreSession session, String documentType, String url) {
             super(session);
             this.documentType = documentType;
             this.url = url;
@@ -201,8 +187,7 @@ public class SiteActionsBean {
         public void run() throws ClientException {
             String queryString = String.format("SELECT * FROM %s WHERE "
                     + "ecm:mixinType = 'WebView' AND webc:url = \"%s\" AND "
-                    + "ecm:isCheckedInVersion = 0 AND ecm:isProxy = 0 "
-                    + "AND ecm:currentLifeCycleState != 'deleted' "
+                    + "ecm:isCheckedInVersion = 0 AND ecm:isProxy = 0 " + "AND ecm:currentLifeCycleState != 'deleted' "
                     + "AND webc:isWebContainer = 1", documentType, url);
             list = session.query(queryString);
         }

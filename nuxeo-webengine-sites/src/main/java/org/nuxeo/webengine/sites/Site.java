@@ -47,8 +47,8 @@ import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.webengine.sites.utils.SiteQueriesCollection;
 
 /**
- * Web object implementation corresponding to Site. It is resolved from module
- * root web object. It holds the site fragments back methods.
+ * Web object implementation corresponding to Site. It is resolved from module root web object. It holds the site
+ * fragments back methods.
  */
 @WebObject(type = WEBSITE, superType = "AbstractSiteDocumentObject", facets = { WEBSITE })
 @Produces("text/html;charset=UTF-8")
@@ -66,14 +66,13 @@ public class Site extends AbstractSiteDocumentObject {
     }
 
     /**
-     * Must use the same method name as super.traverse() otherwise we introduce
-     * ambiguous sub-resources locators which will fail in jersey.
+     * Must use the same method name as super.traverse() otherwise we introduce ambiguous sub-resources locators which
+     * will fail in jersey.
      */
     @Path("{page}")
     public Resource traverse(@PathParam("page") String page) {
         try {
-            DocumentModel pageDoc = ctx.getCoreSession().getChild(doc.getRef(),
-                    page);
+            DocumentModel pageDoc = ctx.getCoreSession().getChild(doc.getRef(), page);
             setDoGetParameters();
             return ctx.newObject(pageDoc.getType(), pageDoc);
         } catch (Exception e) {
@@ -85,14 +84,14 @@ public class Site extends AbstractSiteDocumentObject {
         WebContext context = WebEngine.getActiveContext();
         CoreSession session = context.getCoreSession();
         try {
-            DocumentModelList list = SiteQueriesCollection.querySitesByUrlAndDocType(
-                    session, url, getWebSiteDocumentType());
+            DocumentModelList list = SiteQueriesCollection.querySitesByUrlAndDocType(session, url,
+                    getWebSiteDocumentType());
             if (!list.isEmpty()) {
                 return list.get(0);
             }
             if (((NuxeoPrincipal) session.getPrincipal()).isAnonymous()) {
-                Boolean siteExists = SiteQueriesCollection.checkUnrestrictedSiteExistenceByUrlAndDocType(
-                        session, url, getWebSiteDocumentType());
+                Boolean siteExists = SiteQueriesCollection.checkUnrestrictedSiteExistenceByUrlAndDocType(session, url,
+                        getWebSiteDocumentType());
                 if (siteExists) {
                     setForceRedirectToLogout(true);
                 }

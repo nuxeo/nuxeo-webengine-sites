@@ -38,7 +38,6 @@ import org.nuxeo.webengine.sites.utils.SitesRelationsWikiHelper;
 
 /**
  * @author <a href="mailto:cbaican@nuxeo.com">Catalin Baican</a>
- *
  */
 public class SitesWikiListener implements EventListener {
 
@@ -53,8 +52,7 @@ public class SitesWikiListener implements EventListener {
     public void handleEvent(Event event) {
         String eventName = event.getName();
 
-        if (!(DOCUMENT_UPDATED.equals(eventName)
-                || DOCUMENT_CREATED.equals(eventName)
+        if (!(DOCUMENT_UPDATED.equals(eventName) || DOCUMENT_CREATED.equals(eventName)
                 || BEFORE_DOC_UPDATE.equals(eventName) || ABOUT_TO_CREATE.equals(eventName))) {
             return;
         }
@@ -79,8 +77,7 @@ public class SitesWikiListener implements EventListener {
             }
 
             WikiProcessingResult result = new WikiProcessingResult();
-            if (BEFORE_DOC_UPDATE.equals(event.getName())
-                    || ABOUT_TO_CREATE.equals(event.getName())) {
+            if (BEFORE_DOC_UPDATE.equals(event.getName()) || ABOUT_TO_CREATE.equals(event.getName())) {
                 String wikiContent = (String) webPage.getPropertyValue(WEBPAGE_CONTENT);
                 String basePath = (String) webPage.getContextData("basePath");
                 if (basePath == null) {
@@ -123,10 +120,10 @@ public class SitesWikiListener implements EventListener {
         for (int i = 0; i < wikiLinks.length; i++) {
             String[] splitWikiLinks = StringUtils.split(wikiLinks[i]);
             String linkString = splitWikiLinks[0];
-            boolean isImageLink=false;
+            boolean isImageLink = false;
             String orgLinkString = linkString;
             if (linkString.startsWith(imageTag)) {
-                isImageLink=true;
+                isImageLink = true;
                 linkString = linkString.substring(6);
             }
 
@@ -137,16 +134,13 @@ public class SitesWikiListener implements EventListener {
                 if (linkString.startsWith(".")) {
                     // Absolute path
                     // Just replace . with /
-                    newLinkString = basePath
-                            + linkString.replace(".", "/");
+                    newLinkString = basePath + linkString.replace(".", "/");
                 } else {
                     // Relative path
-                    if (targetObjectPath!=null) {
+                    if (targetObjectPath != null) {
                         newLinkString = linkString.replace(".", "/");
-                        newLinkString = targetObjectPath + "/"
-                            + newLinkString;
-                    }
-                    else {
+                        newLinkString = targetObjectPath + "/" + newLinkString;
+                    } else {
                         // can not process for now ...
                         newLinkString = linkString;
                     }
@@ -158,8 +152,7 @@ public class SitesWikiListener implements EventListener {
                 if (isImageLink) {
                     newLinkString = imageTag + newLinkString;
                 }
-                wikiContent = wikiContent.replace(orgLinkString,
-                        newLinkString);
+                wikiContent = wikiContent.replace(orgLinkString, newLinkString);
             }
 
             if (linkString.startsWith(basePath)) {

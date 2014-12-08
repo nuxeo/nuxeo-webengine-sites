@@ -60,24 +60,18 @@ public class BlogPost extends Page {
         String month = ctx.getRequest().getParameter("month");
         if (year != null) {
             Calendar calendar;
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-                    "yyyy-MM-dd", WebEngine.getActiveContext().getLocale());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd",
+                    WebEngine.getActiveContext().getLocale());
             if (month != null) {
-                calendar = new GregorianCalendar(new Integer(year).intValue(),
-                        new Integer(month).intValue()-1, 1);
-                ctx.setProperty(DATE_AFTER,
-                        simpleDateFormat.format(calendar.getTime()));
+                calendar = new GregorianCalendar(new Integer(year).intValue(), new Integer(month).intValue() - 1, 1);
+                ctx.setProperty(DATE_AFTER, simpleDateFormat.format(calendar.getTime()));
                 calendar.add(Calendar.MONTH, 1);
-                ctx.setProperty(DATE_BEFORE,
-                        simpleDateFormat.format(calendar.getTime()));
+                ctx.setProperty(DATE_BEFORE, simpleDateFormat.format(calendar.getTime()));
             } else {
-                calendar = new GregorianCalendar(new Integer(year).intValue(),
-                        Calendar.JANUARY, 1);
-                ctx.setProperty(DATE_AFTER,
-                        simpleDateFormat.format(calendar.getTime()));
+                calendar = new GregorianCalendar(new Integer(year).intValue(), Calendar.JANUARY, 1);
+                ctx.setProperty(DATE_AFTER, simpleDateFormat.format(calendar.getTime()));
                 calendar.add(Calendar.YEAR, 1);
-                ctx.setProperty(DATE_BEFORE,
-                        simpleDateFormat.format(calendar.getTime()));
+                ctx.setProperty(DATE_BEFORE, simpleDateFormat.format(calendar.getTime()));
             }
         }
     }

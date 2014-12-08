@@ -36,7 +36,6 @@ import org.nuxeo.webengine.sites.utils.SiteUtils;
  * Unit tests for the utils methods.
  *
  * @author rux
- *
  */
 public class TestWebengineSiteUtils extends SQLRepositoryTestCase {
 
@@ -80,16 +79,14 @@ public class TestWebengineSiteUtils extends SQLRepositoryTestCase {
     public void testContextualLinks() throws Exception {
 
         entryTest();
-        DocumentModel contextualLink1 = session.createDocumentModel(
-                webSite.getPathAsString(), "cl1",
+        DocumentModel contextualLink1 = session.createDocumentModel(webSite.getPathAsString(), "cl1",
                 SiteConstants.CONTEXTUAL_LINK);
         contextualLink1.setPropertyValue("dc:title", "CL1");
         contextualLink1.setPropertyValue("dc:description", "CL1 description");
         contextualLink1.setPropertyValue("clink:link", "http://link1");
         contextualLink1 = session.createDocument(contextualLink1);
         contextualLink1 = session.saveDocument(contextualLink1);
-        DocumentModel contextualLink2 = session.createDocumentModel(
-                webSite.getPathAsString(), "cl2",
+        DocumentModel contextualLink2 = session.createDocumentModel(webSite.getPathAsString(), "cl2",
                 SiteConstants.CONTEXTUAL_LINK);
         contextualLink2.setPropertyValue("dc:title", "CL2");
         contextualLink2.setPropertyValue("dc:description", "CL2 description");
@@ -99,22 +96,17 @@ public class TestWebengineSiteUtils extends SQLRepositoryTestCase {
 
         session.save();
 
-        DocumentModelList cLinks = session.getChildren(webSite.getRef(),
-                SiteConstants.CONTEXTUAL_LINK);
+        DocumentModelList cLinks = session.getChildren(webSite.getRef(), SiteConstants.CONTEXTUAL_LINK);
         assertEquals("Don't have 2 links?", 2, cLinks.size());
         for (DocumentModel linkObject : cLinks) {
             String linkTitle = SiteUtils.getString(linkObject, "dc:title");
-            String description = SiteUtils.getString(linkObject,
-                    "dc:description");
+            String description = SiteUtils.getString(linkObject, "dc:description");
             String link = SiteUtils.getString(linkObject, "clink:link");
 
-            assertTrue("Title not correct: " + linkTitle,
-                    "CL1".equals(linkTitle) || "CL2".equals(linkTitle));
-            assertTrue("Description not correct: " + description,
-                    "CL1 description".equals(description)
-                            || "CL2 description".equals(description));
-            assertTrue("Link not correct: " + description,
-                    "http://link1".equals(link) || "http://link2".equals(link));
+            assertTrue("Title not correct: " + linkTitle, "CL1".equals(linkTitle) || "CL2".equals(linkTitle));
+            assertTrue("Description not correct: " + description, "CL1 description".equals(description)
+                    || "CL2 description".equals(description));
+            assertTrue("Link not correct: " + description, "http://link1".equals(link) || "http://link2".equals(link));
         }
     }
 

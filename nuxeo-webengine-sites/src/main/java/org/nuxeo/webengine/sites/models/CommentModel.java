@@ -19,8 +19,7 @@ package org.nuxeo.webengine.sites.models;
 import org.nuxeo.theme.models.AbstractModel;
 
 /**
- * Model related to comments that are bounded to a <b>WebPage</b> in the
- * fragment initialization mechanism
+ * Model related to comments that are bounded to a <b>WebPage</b> in the fragment initialization mechanism
  *
  * @author rux
  */
@@ -38,8 +37,7 @@ public class CommentModel extends AbstractModel {
 
     private boolean pendingComment;
 
-    public CommentModel(String creationDate, String author, String commentText,
-            String ref, boolean pendingComment) {
+    public CommentModel(String creationDate, String author, String commentText, String ref, boolean pendingComment) {
         this.creationDate = creationDate;
         this.author = author;
         this.commentText = commentText;

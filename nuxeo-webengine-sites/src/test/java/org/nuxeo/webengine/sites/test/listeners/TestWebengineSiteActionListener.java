@@ -69,8 +69,7 @@ public class TestWebengineSiteActionListener extends SQLRepositoryTestCase {
     public void testSiteActionListenerWorkspace() throws Exception {
         final String WorkspaceTitle = "Test Workspace";
         String id = IdUtils.generatePathSegment(WorkspaceTitle);
-        DocumentModel workspace = session.createDocumentModel("/", id,
-                "Workspace");
+        DocumentModel workspace = session.createDocumentModel("/", id, "Workspace");
         workspace.setPropertyValue("dc:title", WorkspaceTitle);
         workspace = session.createDocument(workspace);
         workspace = session.saveDocument(workspace);
@@ -86,8 +85,7 @@ public class TestWebengineSiteActionListener extends SQLRepositoryTestCase {
         assertFalse("No name in document?", StringUtils.isBlank(documentName));
         assertFalse("No title in document?", StringUtils.isBlank(documentTitle));
         // name contains the title
-        assertEquals("Name not valid for web container: " + siteName,
-                documentTitle, siteName);
+        assertEquals("Name not valid for web container: " + siteName, documentTitle, siteName);
         // url contains the name
         assertEquals("URL not valid for web container: " + siteUrl, siteUrl,
                 URIUtils.quoteURIPathComponent(documentName, false));
@@ -113,8 +111,7 @@ public class TestWebengineSiteActionListener extends SQLRepositoryTestCase {
         assertFalse("No name in document?", StringUtils.isBlank(documentName));
         assertFalse("No title in document?", StringUtils.isBlank(documentTitle));
         // name contains the title
-        assertEquals("Name not valid for web container: " + siteName,
-                documentTitle, siteName);
+        assertEquals("Name not valid for web container: " + siteName, documentTitle, siteName);
         // url contains the name
         assertEquals("URL not valid for web container: " + siteUrl, siteUrl,
                 URIUtils.quoteURIPathComponent(documentName, false));

@@ -32,8 +32,8 @@ import org.nuxeo.webengine.sites.models.CommentModel;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
 /**
- * Action fragment for initializing the fragment related to retrieving the
- * comments that are bounded to a <b>WebPage</b>.
+ * Action fragment for initializing the fragment related to retrieving the comments that are bounded to a
+ * <b>WebPage</b>.
  *
  * @author rux
  */
@@ -47,8 +47,7 @@ public class PageLastCommentsFragment extends AbstractFragment {
         CommentListModel model = new CommentListModel();
         if (WebEngine.getActiveContext() != null) {
             WebContext ctx = WebEngine.getActiveContext();
-            DocumentModel documentModel = ctx.getTargetObject().getAdapter(
-                    DocumentModel.class);
+            DocumentModel documentModel = ctx.getTargetObject().getAdapter(DocumentModel.class);
 
             try {
                 CommentManager commentManager = SiteUtils.getCommentManager();
@@ -59,16 +58,14 @@ public class PageLastCommentsFragment extends AbstractFragment {
                 String commentText;
                 for (DocumentModel doc : commentManager.getComments(documentModel)) {
                     if (CommentsConstants.PUBLISHED_STATE.equals(doc.getCurrentLifeCycleState())) {
-                        GregorianCalendar modificationDate = (GregorianCalendar) doc.getProperty(
-                                "comment:creationDate").getValue();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-                                "dd MMMM",
+                        GregorianCalendar modificationDate = (GregorianCalendar) doc.getProperty("comment:creationDate").getValue();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM",
                                 WebEngine.getActiveContext().getLocale());
                         creationDate = simpleDateFormat.format(modificationDate.getTime());
                         author = (String) doc.getProperty("comment:author").getValue();
                         commentText = (String) doc.getProperty("comment:text").getValue();
-                        commentModel = new CommentModel(creationDate, author,
-                                commentText, doc.getRef().toString(), false);
+                        commentModel = new CommentModel(creationDate, author, commentText, doc.getRef().toString(),
+                                false);
                         model.addItem(commentModel);
                     }
                 }
@@ -77,17 +74,15 @@ public class PageLastCommentsFragment extends AbstractFragment {
 
                 for (DocumentModel doc : commentManager.getComments(documentModel)) {
                     if (CommentsConstants.PENDING_STATE.equals(doc.getCurrentLifeCycleState())) {
-                        GregorianCalendar modificationDate = (GregorianCalendar) doc.getProperty(
-                                "comment:creationDate").getValue();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-                                "dd MMMM",
+                        GregorianCalendar modificationDate = (GregorianCalendar) doc.getProperty("comment:creationDate").getValue();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM",
                                 WebEngine.getActiveContext().getLocale());
 
                         creationDate = simpleDateFormat.format(modificationDate.getTime());
                         author = (String) doc.getProperty("comment:author").getValue();
                         commentText = (String) doc.getProperty("comment:text").getValue();
-                        commentModel = new CommentModel(creationDate, author,
-                                commentText, doc.getRef().toString(), true);
+                        commentModel = new CommentModel(creationDate, author, commentText, doc.getRef().toString(),
+                                true);
                         model.addItem(commentModel);
 
                     }

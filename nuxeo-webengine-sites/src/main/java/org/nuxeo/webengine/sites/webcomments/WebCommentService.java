@@ -25,39 +25,34 @@ import org.nuxeo.ecm.webengine.model.WebAdapter;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
 /**
- * Web Comment Service - extension of base's Comment Service with specifics
- * of sites module.
+ * Web Comment Service - extension of base's Comment Service with specifics of sites module.
  *
  * @author rux
  */
-@WebAdapter(name = "webcomments", type = "WebCommentService", targetType = "Document", targetFacets = {"Commentable"})
+@WebAdapter(name = "webcomments", type = "WebCommentService", targetType = "Document", targetFacets = { "Commentable" })
 public class WebCommentService extends CommentService {
 
     @Override
-    protected DocumentModel createCommentDocument(CoreSession session,
-            DocumentModel target, DocumentModel comment) throws ClientException {
+    protected DocumentModel createCommentDocument(CoreSession session, DocumentModel target, DocumentModel comment)
+            throws ClientException {
         DocumentModel site = SiteUtils.getFirstWebSiteParent(session, target);
         if (site == null) {
             return super.createCommentDocument(session, target, comment);
         } else {
-            return getCommentManager().createLocatedComment(target, comment,
-                    site.getPathAsString());
+            return getCommentManager().createLocatedComment(target, comment, site.getPathAsString());
         }
     }
 
     @Override
-    protected void publishComment(CoreSession session, DocumentModel target,
-            DocumentModel comment) throws ClientException {
-        //CommentsModerationService commentsModerationService = getCommentsModerationService();
-        if (SiteUtils.isCurrentModerated(session, target)
-                && !SiteUtils.isModeratedByCurrentUser(session, target)) {
+    protected void publishComment(CoreSession session, DocumentModel target, DocumentModel comment)
+            throws ClientException {
+        // CommentsModerationService commentsModerationService = getCommentsModerationService();
+        if (SiteUtils.isCurrentModerated(session, target) && !SiteUtils.isModeratedByCurrentUser(session, target)) {
             // if current page is moderated
             // get all moderators
-            ArrayList<String> moderators = SiteUtils.getModerators(
-                    session, target);
+            ArrayList<String> moderators = SiteUtils.getModerators(session, target);
             // start the moderation process
-            getCommentsModerationService().startModeration(session, target,
-                    comment.getId(), moderators);
+            getCommentsModerationService().startModeration(session, target, comment.getId(), moderators);
         } else {
             // simply publish the comment
             super.publishComment(session, target, comment);

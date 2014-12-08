@@ -72,8 +72,7 @@ public class Sites extends ModuleRoot {
                 WebContext context = WebEngine.getActiveContext();
                 CoreSession session = context.getCoreSession();
                 ctx.getRequest().setAttribute(THEME_BUNDLE, getThemePage());
-                return getTemplate("list_sites.ftl").arg("sites", sites).arg(
-                        "rootDoc", session.getRootDocument());
+                return getTemplate("list_sites.ftl").arg("sites", sites).arg("rootDoc", session.getRootDocument());
             } else {
                 return newObject(getWebSiteObjectTypeName(), path);
             }
@@ -86,15 +85,13 @@ public class Sites extends ModuleRoot {
         WebContext context = WebEngine.getActiveContext();
         CoreSession session = context.getCoreSession();
 
-        DocumentModelList webSites = SiteQueriesCollection.queryAllSites(
-                session, getWebSiteDocumentType());
+        DocumentModelList webSites = SiteQueriesCollection.queryAllSites(session, getWebSiteDocumentType());
         List<Object> sites = new ArrayList<Object>();
         for (DocumentModel webSite : webSites) {
             try {
                 Map<String, String> site = new HashMap<String, String>();
                 site.put("href", SiteUtils.getString(webSite, WEBCONTAINER_URL));
-                site.put("name",
-                        SiteUtils.getString(webSite, WEBCONTAINER_NAME));
+                site.put("name", SiteUtils.getString(webSite, WEBCONTAINER_NAME));
                 sites.add(site);
             } catch (Exception e) {
                 log.error("Problem retrieving the existing websites ...", e);

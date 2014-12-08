@@ -29,7 +29,6 @@ import org.nuxeo.webengine.sites.utils.SiteConstants;
 
 /**
  * @author <a href="mailto:cbaican@nuxeo.com">Catalin Baican</a>
- *
  */
 public class WikiSitesPageLinkResolver implements WikiFilter {
 
@@ -87,8 +86,7 @@ public class WikiSitesPageLinkResolver implements WikiFilter {
         return links.toString();
     }
 
-    protected String buildLink(String basePath, StringBuffer relativePath,
-            String str) {
+    protected String buildLink(String basePath, StringBuffer relativePath, String str) {
         return String.format(SiteConstants.LINK_TEMPLATE, basePath + relativePath, str);
     }
 

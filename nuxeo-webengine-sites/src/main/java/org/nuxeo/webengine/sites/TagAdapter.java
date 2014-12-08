@@ -53,10 +53,8 @@ public class TagAdapter extends DefaultAdapter {
             ctx.setProperty(TAG_DOCUMENT, tagId);
             if (documentObject instanceof AbstractSiteDocumentObject) {
                 AbstractSiteDocumentObject abstractSiteDocumentObject = (AbstractSiteDocumentObject) documentObject;
-                ctx.getRequest().setAttribute(THEME_BUNDLE,
-                        abstractSiteDocumentObject.getSearchThemePage());
-                return getTemplate("template_default.ftl").args(
-                        abstractSiteDocumentObject.getArguments());
+                ctx.getRequest().setAttribute(THEME_BUNDLE, abstractSiteDocumentObject.getSearchThemePage());
+                return getTemplate("template_default.ftl").args(abstractSiteDocumentObject.getArguments());
             }
             return getTemplate("template_default.ftl");
         } catch (Exception e) {
@@ -84,8 +82,7 @@ public class TagAdapter extends DefaultAdapter {
                 }
             }
 
-            String path = SiteUtils.getPagePath(
-                    SiteUtils.getFirstWebSiteParent(session, doc), doc);
+            String path = SiteUtils.getPagePath(SiteUtils.getFirstWebSiteParent(session, doc), doc);
             return redirect(path);
         } catch (Exception e) {
             throw WebException.wrap(e);
@@ -106,8 +103,7 @@ public class TagAdapter extends DefaultAdapter {
                 tagService.untag(session, doc.getId(), label, null);
             }
 
-            String path = SiteUtils.getPagePath(
-                    SiteUtils.getFirstWebSiteParent(session, doc), doc);
+            String path = SiteUtils.getPagePath(SiteUtils.getFirstWebSiteParent(session, doc), doc);
             return redirect(path);
         } catch (Exception e) {
             throw WebException.wrap(e);

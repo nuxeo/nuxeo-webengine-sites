@@ -47,14 +47,12 @@ import org.wikimodel.wem.common.CommonWikiParser;
 
 /**
  * @author <a href="mailto:cbaican@nuxeo.com">Catalin Baican</a>
- *
  */
 public class SitesRelationsWikiHelper {
 
     private static final Log log = LogFactory.getLog(SitesRelationsWikiHelper.class);
 
-    public static final Resource HAS_LINK_TO = new ResourceImpl(
-            "http://www.nuxeo.org/sitesWiki/hasLinkTo");
+    public static final Resource HAS_LINK_TO = new ResourceImpl("http://www.nuxeo.org/sitesWiki/hasLinkTo");
 
     // Utility class.
     private SitesRelationsWikiHelper() {
@@ -86,15 +84,13 @@ public class SitesRelationsWikiHelper {
             } else {
                 word = targetBasePath + "/" + word;
             }
-            Statement stmt = new StatementImpl(docResource,
-                    HAS_LINK_TO, new LiteralImpl(word));
+            Statement stmt = new StatementImpl(docResource, HAS_LINK_TO, new LiteralImpl(word));
             stmts.add(stmt);
         }
 
         // Add additional links
         for (String word : linksList) {
-            Statement stmt = new StatementImpl(docResource,
-                    HAS_LINK_TO, new LiteralImpl(word));
+            Statement stmt = new StatementImpl(docResource, HAS_LINK_TO, new LiteralImpl(word));
             stmts.add(stmt);
         }
         graph.add(stmts);

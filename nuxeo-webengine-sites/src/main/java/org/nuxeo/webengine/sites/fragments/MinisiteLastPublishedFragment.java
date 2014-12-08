@@ -37,9 +37,8 @@ import org.nuxeo.webengine.sites.utils.SiteQueriesCollection;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
 /**
- * Action fragment for initializing the fragment related to retrieving a certain
- * number of pages with information about the last modified <b>WebPage</b>-s
- * that are made under an <b>WebSite</b> or <b>WebPage</b>
+ * Action fragment for initializing the fragment related to retrieving a certain number of pages with information about
+ * the last modified <b>WebPage</b>-s that are made under an <b>WebSite</b> or <b>WebPage</b>
  *
  * @author rux
  */
@@ -50,9 +49,8 @@ public class MinisiteLastPublishedFragment extends AbstractFragment {
     private int noWordsFromContent = 50;
 
     /**
-     * Retrieves a certain number of pages with information about the last
-     * modified <b>WebPage</b>-s that are made under an <b>WebSite</b> or
-     * <b>WebPage</b> that is received as parameter.
+     * Retrieves a certain number of pages with information about the last modified <b>WebPage</b>-s that are made under
+     * an <b>WebSite</b> or <b>WebPage</b> that is received as parameter.
      */
     @Override
     public Model getModel() throws ModelException {
@@ -60,41 +58,32 @@ public class MinisiteLastPublishedFragment extends AbstractFragment {
         if (WebEngine.getActiveContext() != null) {
             WebContext ctx = WebEngine.getActiveContext();
             CoreSession session = ctx.getCoreSession();
-            DocumentModel documentModel = ctx.getTargetObject().getAdapter(
-                    DocumentModel.class);
+            DocumentModel documentModel = ctx.getTargetObject().getAdapter(DocumentModel.class);
 
             try {
-                DocumentModel ws = SiteUtils.getFirstWebSiteParent(session,
-                        documentModel);
-                DocumentModelList webPages = SiteQueriesCollection.queryLastModifiedPages(
-                        session, ws.getPathAsString(), WEBPAGE, noPages);
+                DocumentModel ws = SiteUtils.getFirstWebSiteParent(session, documentModel);
+                DocumentModelList webPages = SiteQueriesCollection.queryLastModifiedPages(session,
+                        ws.getPathAsString(), WEBPAGE, noPages);
 
                 for (DocumentModel webPage : webPages) {
                     if (!webPage.getCurrentLifeCycleState().equals(DELETED)) {
 
                         String name = SiteUtils.getString(webPage, "dc:title");
                         String path = SiteUtils.getPagePath(ws, webPage);
-                        String description = SiteUtils.getString(webPage,
-                                "dc:description");
+                        String description = SiteUtils.getString(webPage, "dc:description");
 
                         String content = SiteUtils.getFistNWordsFromString(
-                                SiteUtils.getString(webPage, WEBPAGE_CONTENT),
-                                noWordsFromContent);
+                                SiteUtils.getString(webPage, WEBPAGE_CONTENT), noWordsFromContent);
                         String author = SiteUtils.getString(webPage, "dc:creator");
-                        GregorianCalendar modificationDate = SiteUtils.getGregorianCalendar(
-                                webPage, "dc:modified");
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-                                "dd MMMM",
+                        GregorianCalendar modificationDate = SiteUtils.getGregorianCalendar(webPage, "dc:modified");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM",
                                 WebEngine.getActiveContext().getLocale());
                         String formattedString = simpleDateFormat.format(modificationDate.getTime());
                         String[] splitFormattedString = formattedString.split(" ");
-                        String numberComments = Integer.toString(SiteUtils.getNumberCommentsForPage(
-                                session, webPage));
+                        String numberComments = Integer.toString(SiteUtils.getNumberCommentsForPage(session, webPage));
 
-                        WebpageModel webpageModel = new WebpageModel(name, path,
-                                description, content, author,
-                                splitFormattedString[0],
-                                splitFormattedString[1], numberComments);
+                        WebpageModel webpageModel = new WebpageModel(name, path, description, content, author,
+                                splitFormattedString[0], splitFormattedString[1], numberComments);
 
                         model.addItem(webpageModel);
                     }

@@ -33,8 +33,7 @@ import org.nuxeo.webengine.blogs.utils.BlogQueriesCollection;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
 /**
- * Action fragment for initializing the fragment related to retrieving the
- * archive of a certain <b>BlogSite</b>.
+ * Action fragment for initializing the fragment related to retrieving the archive of a certain <b>BlogSite</b>.
  *
  * @author rux
  */
@@ -48,40 +47,32 @@ public class BlogSiteArchiveFragment extends AbstractFragment {
         if (WebEngine.getActiveContext() != null) {
             WebContext ctx = WebEngine.getActiveContext();
             CoreSession session = ctx.getCoreSession();
-            DocumentModel documentModel = ctx.getTargetObject().getAdapter(
-                    DocumentModel.class);
+            DocumentModel documentModel = ctx.getTargetObject().getAdapter(DocumentModel.class);
 
-            SimpleDateFormat simpleMonthFormat = new SimpleDateFormat(
-                    "MMMM MM yyyy", WebEngine.getActiveContext().getLocale());
+            SimpleDateFormat simpleMonthFormat = new SimpleDateFormat("MMMM MM yyyy",
+                    WebEngine.getActiveContext().getLocale());
 
             try {
-                DocumentModel blogSite = SiteUtils.getFirstWebSiteParent(
-                        session, documentModel);
-                DocumentModelList blogPosts = BlogQueriesCollection.getAllBlogPosts(
-                        session, blogSite.getPathAsString());
+                DocumentModel blogSite = SiteUtils.getFirstWebSiteParent(session, documentModel);
+                DocumentModelList blogPosts = BlogQueriesCollection.getAllBlogPosts(session, blogSite.getPathAsString());
                 for (DocumentModel blogPost : blogPosts) {
 
-                    Calendar creationDate = SiteUtils.getGregorianCalendar(blogPost,
-                            "dc:created");
+                    Calendar creationDate = SiteUtils.getGregorianCalendar(blogPost, "dc:created");
                     if (creationDate == null) {
                         // no creation date nothing to do
                         continue;
                     }
-                    String[] dateDetails = simpleMonthFormat.format(
-                            creationDate.getTime()).split(" ");
+                    String[] dateDetails = simpleMonthFormat.format(creationDate.getTime()).split(" ");
                     BlogSiteArchiveYearModel archiveYearModel = getYearModel(model, dateDetails[2]);
                     if (archiveYearModel == null) {
-                        archiveYearModel = new BlogSiteArchiveYearModel(
-                                dateDetails[2], path, 0);
+                        archiveYearModel = new BlogSiteArchiveYearModel(dateDetails[2], path, 0);
 
                         model.addItem(archiveYearModel);
                     }
                     archiveYearModel.increaseCount();
-                    BlogSiteArchiveMonthModel archiveMonthModel = getMonthModel(archiveYearModel,
-                            dateDetails[1]);
+                    BlogSiteArchiveMonthModel archiveMonthModel = getMonthModel(archiveYearModel, dateDetails[1]);
                     if (archiveMonthModel == null) {
-                        archiveMonthModel = new BlogSiteArchiveMonthModel(
-                                dateDetails[0], dateDetails[1], path, 0);
+                        archiveMonthModel = new BlogSiteArchiveMonthModel(dateDetails[0], dateDetails[1], path, 0);
                         archiveYearModel.addItem(archiveMonthModel);
                     }
                     archiveMonthModel.increaseCount();

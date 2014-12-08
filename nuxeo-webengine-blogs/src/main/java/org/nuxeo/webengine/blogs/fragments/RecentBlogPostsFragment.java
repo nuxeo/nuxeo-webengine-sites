@@ -37,23 +37,22 @@ import org.nuxeo.webengine.sites.utils.SiteQueriesCollection;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
 /**
- * Action fragment for initializing the fragment related to retrieving a certain
- * number of blog posts with information about the last <b>BlogPost</b>-s that
- * are made under an <b>BlogSite</b>.
+ * Action fragment for initializing the fragment related to retrieving a certain number of blog posts with information
+ * about the last <b>BlogPost</b>-s that are made under an <b>BlogSite</b>.
  *
  * @author rux
  */
 public class RecentBlogPostsFragment extends AbstractFragment {
 
     public static final int noForBlogSite = 15;
+
     public static final int noForBlogPost = 5;
 
     private static String[] weekDays;
 
     /**
-     * Retrieves a certain number of blog posts with information about the last
-     * <b>BlogPost</b>-s that are made under an <b>BlogSite</b> that is received
-     * as parameter.
+     * Retrieves a certain number of blog posts with information about the last <b>BlogPost</b>-s that are made under an
+     * <b>BlogSite</b> that is received as parameter.
      */
     @Override
     public Model getModel() throws ModelException {
@@ -61,49 +60,37 @@ public class RecentBlogPostsFragment extends AbstractFragment {
         if (WebEngine.getActiveContext() != null) {
             WebContext ctx = WebEngine.getActiveContext();
             CoreSession session = ctx.getCoreSession();
-            DocumentModel documentModel = ctx.getTargetObject().getAdapter(
-                    DocumentModel.class);
+            DocumentModel documentModel = ctx.getTargetObject().getAdapter(DocumentModel.class);
 
-            SimpleDateFormat simpleMonthFormat = new SimpleDateFormat(
-                    "dd MMMM yyyy", WebEngine.getActiveContext().getLocale());
+            SimpleDateFormat simpleMonthFormat = new SimpleDateFormat("dd MMMM yyyy",
+                    WebEngine.getActiveContext().getLocale());
             try {
-                DocumentModel blogSite = SiteUtils.getFirstWebSiteParent(
-                        session, documentModel);
-                DocumentModelList blogPosts = SiteQueriesCollection.queryLastModifiedPages(
-                        session,
-                        blogSite.getPathAsString(),
-                        BLOG_POST_DOC_TYPE,
-                        BLOG_POST_DOC_TYPE.equals(documentModel.getType()) ? noForBlogPost
-                                : noForBlogSite);
+                DocumentModel blogSite = SiteUtils.getFirstWebSiteParent(session, documentModel);
+                DocumentModelList blogPosts = SiteQueriesCollection.queryLastModifiedPages(session,
+                        blogSite.getPathAsString(), BLOG_POST_DOC_TYPE,
+                        BLOG_POST_DOC_TYPE.equals(documentModel.getType()) ? noForBlogPost : noForBlogSite);
 
                 for (DocumentModel blogPost : blogPosts) {
                     String title = SiteUtils.getString(blogPost, "dc:title");
                     String path = SiteUtils.getPagePath(blogSite, blogPost);
 
-                    String description = SiteUtils.getString(blogPost,
-                            "dc:description");
+                    String description = SiteUtils.getString(blogPost, "dc:description");
 
-                    String content = SiteUtils.getFistNWordsFromString(
-                            SiteUtils.getString(blogPost, WEBPAGE_CONTENT),
+                    String content = SiteUtils.getFistNWordsFromString(SiteUtils.getString(blogPost, WEBPAGE_CONTENT),
                             Integer.MAX_VALUE);
                     String author = SiteUtils.getString(blogPost, "dc:creator");
 
-                    GregorianCalendar creationDate = SiteUtils.getGregorianCalendar(blogPost,
-                            "dc:created");
+                    GregorianCalendar creationDate = SiteUtils.getGregorianCalendar(blogPost, "dc:created");
 
                     String day = getWeekDay(creationDate.get(Calendar.DAY_OF_WEEK));
                     BlogSiteArchiveDayModel dayModel = getYearModel(model, day);
                     if (dayModel == null) {
-                        dayModel = new BlogSiteArchiveDayModel(
-                                day,
-                                simpleMonthFormat.format(creationDate.getTime()),
-                                0);
+                        dayModel = new BlogSiteArchiveDayModel(day, simpleMonthFormat.format(creationDate.getTime()), 0);
                         model.addItem(dayModel);
                     }
                     dayModel.increaseCount();
 
-                    BlogPostModel blogPostModel = new BlogPostModel(title, path, description,
-                            content, author);
+                    BlogPostModel blogPostModel = new BlogPostModel(title, path, description, content, author);
                     dayModel.addItem(blogPostModel);
                 }
             } catch (Exception e) {
@@ -115,16 +102,14 @@ public class RecentBlogPostsFragment extends AbstractFragment {
     }
 
     /**
-     * Utility method used to return the day of the week as a string
-     * representation.
+     * Utility method used to return the day of the week as a string representation.
      *
      * @param day day of the week as integer
      * @return day of the week as string
      */
     private static String getWeekDay(int day) {
         if (weekDays == null) {
-            DateFormatSymbols dfs = new DateFormatSymbols(
-                    WebEngine.getActiveContext().getLocale());
+            DateFormatSymbols dfs = new DateFormatSymbols(WebEngine.getActiveContext().getLocale());
             weekDays = dfs.getWeekdays();
         }
         return weekDays[day];

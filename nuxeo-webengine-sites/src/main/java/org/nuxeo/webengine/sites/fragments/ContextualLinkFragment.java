@@ -29,18 +29,16 @@ import org.nuxeo.webengine.sites.utils.SiteConstants;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
 /**
- * Action fragment for initializing the fragment related to the list with the
- * details about the <b>Contextual Link</b>-s that have been created under a
- * <b>WebSite</b> or <b>Webpage</b> document type.
+ * Action fragment for initializing the fragment related to the list with the details about the <b>Contextual Link</b>-s
+ * that have been created under a <b>WebSite</b> or <b>Webpage</b> document type.
  *
  * @author rux
  */
 public class ContextualLinkFragment extends AbstractFragment {
 
     /**
-     * Returns the list with the details about the <b>Contextual Link</b>-s that
-     * have been created under a <b>WebSite</b> or <b>Webpage</b> document
-     * type.
+     * Returns the list with the details about the <b>Contextual Link</b>-s that have been created under a
+     * <b>WebSite</b> or <b>Webpage</b> document type.
      */
     @Override
     public Model getModel() throws ModelException {
@@ -48,26 +46,21 @@ public class ContextualLinkFragment extends AbstractFragment {
         if (WebEngine.getActiveContext() != null) {
             WebContext ctx = WebEngine.getActiveContext();
             CoreSession session = ctx.getCoreSession();
-            DocumentModel documentModel = ctx.getTargetObject().getAdapter(
-                    DocumentModel.class);
+            DocumentModel documentModel = ctx.getTargetObject().getAdapter(DocumentModel.class);
 
             if (documentModel.hasFacet(SiteConstants.WEB_VIEW_FACET)
                     || SiteConstants.WEBPAGE.equals(documentModel.getType())) {
                 // Is WebSite (has 'WebView' facet) or WebPage.
 
                 try {
-                    for (DocumentModel document : session.getChildren(
-                            documentModel.getRef(),
+                    for (DocumentModel document : session.getChildren(documentModel.getRef(),
                             SiteConstants.CONTEXTUAL_LINK)) {
-                        if (!document.getCurrentLifeCycleState().equals(
-                                SiteConstants.DELETED)) {
+                        if (!document.getCurrentLifeCycleState().equals(SiteConstants.DELETED)) {
 
                             String title = SiteUtils.getString(document, "dc:title");
-                            String description = SiteUtils.getString(document,
-                                    "dc:description");
+                            String description = SiteUtils.getString(document, "dc:description");
                             String link = SiteUtils.getString(document, "clink:link");
-                            ContextualLinkModel linkModel = new ContextualLinkModel(title,
-                                    description, link);
+                            ContextualLinkModel linkModel = new ContextualLinkModel(title, description, link);
                             model.addItem(linkModel);
                         }
                     }

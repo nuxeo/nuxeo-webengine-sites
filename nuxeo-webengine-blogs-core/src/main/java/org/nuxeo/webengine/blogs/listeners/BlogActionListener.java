@@ -33,9 +33,8 @@ import org.nuxeo.webengine.sites.utils.SiteConstants;
 public class BlogActionListener implements EventListener {
 
     /**
-     * Sets the url field and the blog name (if not already set) to the name,
-     * respectively the title of the document model. Also the default theme
-     * settings are set depending of the received document type.
+     * Sets the url field and the blog name (if not already set) to the name, respectively the title of the document
+     * model. Also the default theme settings are set depending of the received document type.
      */
     public void handleEvent(Event event) throws ClientException {
         String eventId = event.getName();
@@ -61,19 +60,16 @@ public class BlogActionListener implements EventListener {
                 // TODO probably the methods from the site modules that keep
                 // this field into account, should be updated in order to ignore
                 // it
-                doc.setPropertyValue(SiteConstants.WEBCONTAINER_ISWEBCONTAINER,
-                        Boolean.TRUE);
+                doc.setPropertyValue(SiteConstants.WEBCONTAINER_ISWEBCONTAINER, Boolean.TRUE);
                 // Set Blog url field
                 String url = doc.getName();
                 url = URIUtils.quoteURIPathComponent(url, false);
                 doc.setPropertyValue(SiteConstants.WEBCONTAINER_URL, url);
-                doc.setPropertyValue(SiteConstants.WEBSITE_SCHEMA_THEME,
-                        "blogs");
+                doc.setPropertyValue(SiteConstants.WEBSITE_SCHEMA_THEME, "blogs");
                 doc.setPropertyValue(SiteConstants.WEBSITE_THEMEPAGE, "site");
             }
             // Set Blog title
-            doc.setPropertyValue(SiteConstants.WEBCONTAINER_NAME,
-                    doc.getTitle());
+            doc.setPropertyValue(SiteConstants.WEBCONTAINER_NAME, doc.getTitle());
 
         } else if (BlogConstants.BLOG_POST_DOC_TYPE.equals(documentType)) {
             doc.setPropertyValue(SiteConstants.WEBPAGE_SCHEMA_THEME, "blogs");

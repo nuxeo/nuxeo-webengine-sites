@@ -35,32 +35,26 @@ import org.nuxeo.webengine.sites.models.TagCloudModel;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
 /**
- * Action fragment for initializing the fragment related to the details about
- * the tag cloud.
+ * Action fragment for initializing the fragment related to the details about the tag cloud.
  */
 public class TagCloudFragment extends AbstractFragment {
 
     /**
-     * Returns the details about the tag cloud that have been created under a
-     * webpage.
+     * Returns the details about the tag cloud that have been created under a webpage.
      */
     @Override
     public Model getModel() throws ModelException {
         TagCloudListModel model = new TagCloudListModel();
         try {
             TagService tagService = Framework.getService(TagService.class);
-            if (tagService == null || WebEngine.getActiveContext() == null
-                    || !tagService.isEnabled()) {
+            if (tagService == null || WebEngine.getActiveContext() == null || !tagService.isEnabled()) {
                 return model;
             }
             WebContext ctx = WebEngine.getActiveContext();
             CoreSession session = ctx.getCoreSession();
-            DocumentModel documentModel = ctx.getTargetObject().getAdapter(
-                    DocumentModel.class);
-            DocumentModel siteDocument = SiteUtils.getFirstWebSiteParent(
-                    session, documentModel);
-            List<Tag> cloud = tagService.getTagCloud(session,
-                    siteDocument.getId(), null, null);
+            DocumentModel documentModel = ctx.getTargetObject().getAdapter(DocumentModel.class);
+            DocumentModel siteDocument = SiteUtils.getFirstWebSiteParent(session, documentModel);
+            List<Tag> cloud = tagService.getTagCloud(session, siteDocument.getId(), null, null);
             if (cloud == null || cloud.isEmpty()) {
                 return model;
             }

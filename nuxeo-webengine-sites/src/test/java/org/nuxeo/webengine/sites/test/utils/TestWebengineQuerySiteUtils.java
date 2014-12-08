@@ -44,10 +44,15 @@ import org.nuxeo.webengine.sites.utils.SiteQueriesCollection;
 public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
 
     private static final String workspaceSiteTitle = "Test Mini Site";
+
     private static final String webSiteTitle = "Test Web Site";
+
     private static final String pageForWorkspaceSiteTitle = "Test WebPage for Workspace Site";
+
     private static final String pageForWebSiteTitle = "Test WebPage for Web Site";
+
     private static final String workspaceSiteUrl = "testMiniSiteUrl";
+
     private static final String webSiteUrl = "testWebSiteUrl";
 
     private DocumentModel workspaceSite;
@@ -84,7 +89,7 @@ public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
         deployContrib("org.nuxeo.ecm.platform.webengine.sites.core.contrib", "OSGI-INF/core-types-contrib.xml");
         deployContrib("org.nuxeo.ecm.platform.webengine.sites.core.contrib", "OSGI-INF/permissions-contrib.xml");
 
-        //deployBundle("org.nuxeo.ecm.platform.webengine.sites.core.contrib");
+        // deployBundle("org.nuxeo.ecm.platform.webengine.sites.core.contrib");
 
         openSession();
         initializeTestData();
@@ -100,14 +105,13 @@ public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
 
     protected void createSites() throws Exception {
         String workspaceSiteId = IdUtils.generatePathSegment(workspaceSiteTitle);
-        workspaceSite = session.createDocumentModel("/", workspaceSiteId,
-                "WebSite");
+        workspaceSite = session.createDocumentModel("/", workspaceSiteId, "WebSite");
         assertNotNull(workspaceSite);
         workspaceSite.setPropertyValue("dc:title", workspaceSiteTitle);
         workspaceSite.setPropertyValue("webc:url", workspaceSiteUrl);
         workspaceSite.setPropertyValue("webcontainer:isWebContainer", true);
         workspaceSite = session.createDocument(workspaceSite);
-        //workspaceSite = session.saveDocument(workspaceSite);
+        // workspaceSite = session.saveDocument(workspaceSite);
         session.save();
         // re-read the document model
         workspaceSite = session.getDocument(workspaceSite.getRef());
@@ -119,17 +123,15 @@ public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
         webSite.setPropertyValue("webc:url", webSiteUrl);
         webSite.setPropertyValue("webcontainer:isWebContainer", true);
         webSite = session.createDocument(webSite);
-        //webSite = session.saveDocument(webSite);
+        // webSite = session.saveDocument(webSite);
         session.save();
         // re-read the document model
         webSite = session.getDocument(webSite.getRef());
     }
 
     protected void createWebPages() throws Exception {
-        webPageForWorkspaceSite = session.createDocumentModel(
-                workspaceSite.getPathAsString(),
-                IdUtils.generatePathSegment(pageForWorkspaceSiteTitle
-                        + System.currentTimeMillis()), WEBPAGE);
+        webPageForWorkspaceSite = session.createDocumentModel(workspaceSite.getPathAsString(),
+                IdUtils.generatePathSegment(pageForWorkspaceSiteTitle + System.currentTimeMillis()), WEBPAGE);
         assertNotNull(webPageForWorkspaceSite);
         webPageForWorkspaceSite = session.createDocument(webPageForWorkspaceSite);
         webPageForWorkspaceSite = session.saveDocument(webPageForWorkspaceSite);
@@ -137,13 +139,11 @@ public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
         // re-read the document model
         webPageForWorkspaceSite = session.getDocument(webPageForWorkspaceSite.getRef());
 
-        webPageForWebSite = session.createDocumentModel(
-                webSite.getPathAsString(),
-                IdUtils.generatePathSegment(pageForWebSiteTitle
-                        + System.currentTimeMillis()), WEBPAGE);
+        webPageForWebSite = session.createDocumentModel(webSite.getPathAsString(),
+                IdUtils.generatePathSegment(pageForWebSiteTitle + System.currentTimeMillis()), WEBPAGE);
         assertNotNull(webPageForWebSite);
         webPageForWebSite = session.createDocument(webPageForWebSite);
-        //webPageForWebSite = session.saveDocument(webPageForWebSite);
+        // webPageForWebSite = session.saveDocument(webPageForWebSite);
         session.save();
         // re-read the document model
         webPageForWebSite = session.getDocument(webPageForWebSite.getRef());
@@ -154,15 +154,13 @@ public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
 
         webCommentForWorkspaceSite = session.createDocumentModel("Comment");
         assertNotNull(webCommentForWorkspaceSite);
-        webCommentForWorkspaceSite = commentManager.createLocatedComment(
-                webPageForWorkspaceSite, webCommentForWorkspaceSite,
-                workspaceSite.getPathAsString());
+        webCommentForWorkspaceSite = commentManager.createLocatedComment(webPageForWorkspaceSite,
+                webCommentForWorkspaceSite, workspaceSite.getPathAsString());
         session.save();
 
         webCommentForWebSite = session.createDocumentModel("Comment");
         assertNotNull(webCommentForWebSite);
-        webCommentForWebSite = commentManager.createLocatedComment(
-                webPageForWebSite, webCommentForWebSite,
+        webCommentForWebSite = commentManager.createLocatedComment(webPageForWebSite, webCommentForWebSite,
                 webSite.getPathAsString());
         session.save();
     }
@@ -175,39 +173,38 @@ public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
 
     @Test
     public void testQueryAllSites() throws Exception {
-        List<DocumentModel> allSites = SiteQueriesCollection.queryAllSites(
-                session, WEBSITE);
+        List<DocumentModel> allSites = SiteQueriesCollection.queryAllSites(session, WEBSITE);
         assertEquals(2, allSites.size());
     }
 
     @Test
     public void testQueryAllSitesByUrl() throws Exception {
-        List<DocumentModel> allWorkspaceSitesByUrlList = SiteQueriesCollection.querySitesByUrlAndDocType(
-                session, workspaceSiteUrl, WEBSITE);
+        List<DocumentModel> allWorkspaceSitesByUrlList = SiteQueriesCollection.querySitesByUrlAndDocType(session,
+                workspaceSiteUrl, WEBSITE);
         assertEquals(1, allWorkspaceSitesByUrlList.size());
-        List<DocumentModel> allWebSitesByUrlList = SiteQueriesCollection.querySitesByUrlAndDocType(
-                session, webSiteUrl, WEBSITE);
+        List<DocumentModel> allWebSitesByUrlList = SiteQueriesCollection.querySitesByUrlAndDocType(session, webSiteUrl,
+                WEBSITE);
         assertEquals(1, allWebSitesByUrlList.size());
     }
 
     @Test
     public void testQueryLastModifiedWebPages() throws Exception {
-        List<DocumentModel> lastWorkspaceSitePages = SiteQueriesCollection.queryLastModifiedPages(
-                session, workspaceSite.getPathAsString(), WEBPAGE, 5);
+        List<DocumentModel> lastWorkspaceSitePages = SiteQueriesCollection.queryLastModifiedPages(session,
+                workspaceSite.getPathAsString(), WEBPAGE, 5);
         assertEquals(1, lastWorkspaceSitePages.size());
-        List<DocumentModel> lastWebSitePages = SiteQueriesCollection.queryLastModifiedPages(
-                session, webSite.getPathAsString(), WEBPAGE, 5);
+        List<DocumentModel> lastWebSitePages = SiteQueriesCollection.queryLastModifiedPages(session,
+                webSite.getPathAsString(), WEBPAGE, 5);
         assertEquals(1, lastWebSitePages.size());
     }
 
     @Test
     public void testQueryLastComments() throws Exception {
-        List<DocumentModel> lastWorkspaceSiteComments = SiteQueriesCollection.queryLastComments(
-                session, workspaceSite.getPathAsString(), 5, false);
+        List<DocumentModel> lastWorkspaceSiteComments = SiteQueriesCollection.queryLastComments(session,
+                workspaceSite.getPathAsString(), 5, false);
         assertEquals(1, lastWorkspaceSiteComments.size());
 
-        List<DocumentModel> lastWebSiteComments = SiteQueriesCollection.queryLastComments(
-                session, webSite.getPathAsString(), 5, false);
+        List<DocumentModel> lastWebSiteComments = SiteQueriesCollection.queryLastComments(session,
+                webSite.getPathAsString(), 5, false);
         assertEquals(1, lastWebSiteComments.size());
     }
 

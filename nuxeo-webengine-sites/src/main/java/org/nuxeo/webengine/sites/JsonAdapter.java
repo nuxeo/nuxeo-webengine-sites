@@ -38,10 +38,11 @@ import static org.nuxeo.webengine.sites.utils.SiteConstants.*;
 /**
  * Adapter service for the tree in sites module.
  */
-@WebAdapter(name = "json", type = "JsonTreeAdapter", facets = {"Site"})
+@WebAdapter(name = "json", type = "JsonTreeAdapter", facets = { "Site" })
 public class JsonAdapter extends DefaultAdapter {
 
     public static final String NAVIGATOR_TREE = "navigatorTree";
+
     public static final String ROOT_DOCUMENT = "siteName";
 
     @GET

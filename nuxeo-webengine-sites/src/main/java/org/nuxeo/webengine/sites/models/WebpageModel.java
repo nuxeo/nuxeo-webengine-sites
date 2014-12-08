@@ -19,8 +19,7 @@ package org.nuxeo.webengine.sites.models;
 import org.nuxeo.theme.models.AbstractModel;
 
 /**
- * Model related to the <b>WebPage</b>-s in the fragment initialization
- * mechanism.
+ * Model related to the <b>WebPage</b>-s in the fragment initialization mechanism.
  *
  * @author rux
  */
@@ -47,9 +46,8 @@ public class WebpageModel extends AbstractModel {
         this.path = path;
     }
 
-    public WebpageModel(String name, String path, String description,
-            String content, String author, String day, String month,
-            String numberComments) {
+    public WebpageModel(String name, String path, String description, String content, String author, String day,
+            String month, String numberComments) {
         this(name, path);
         this.description = description;
         this.content = content;

@@ -34,14 +34,11 @@ public class SiteTreeSerializer extends JSonTreeSerializer {
     public String getUrl(TreeItem item) {
         WebContext ctx = WebEngine.getActiveContext();
         StringBuilder sb = new StringBuilder(SiteUtils.getWebContainersPath());
-        DocumentModel doc = (DocumentModel) ctx.getUserSession().get(
-                JsonAdapter.ROOT_DOCUMENT);
+        DocumentModel doc = (DocumentModel) ctx.getUserSession().get(JsonAdapter.ROOT_DOCUMENT);
         if (doc != null) {
-            sb.append('/').append(SiteUtils.getString(doc,
-                    SiteConstants.WEBCONTAINER_URL, ""));
+            sb.append('/').append(SiteUtils.getString(doc, SiteConstants.WEBCONTAINER_URL, ""));
         }
-        sb.append(URIUtils.quoteURIPathComponent(item.getPath().toString(),
-                false));
+        sb.append(URIUtils.quoteURIPathComponent(item.getPath().toString(), false));
         return sb.toString();
     }
 

@@ -19,8 +19,8 @@ package org.nuxeo.webengine.sites.models;
 import org.nuxeo.theme.models.AbstractModel;
 
 /**
- * Model related to the comments that are last added under a <b>WebPage</b>
- * under a <b>WebSite</b>, in the fragment initialization mechanism.
+ * Model related to the comments that are last added under a <b>WebPage</b> under a <b>WebSite</b>, in the fragment
+ * initialization mechanism.
  *
  * @author rux
  */
@@ -38,8 +38,8 @@ public class WebpageCommentModel extends AbstractModel {
 
     private String month;
 
-    public WebpageCommentModel(String pageTitle, String pagePath,
-            String content, String author, String day, String month) {
+    public WebpageCommentModel(String pageTitle, String pagePath, String content, String author, String day,
+            String month) {
         this.pageTitle = pageTitle;
         this.pagePath = pagePath;
         this.content = content;

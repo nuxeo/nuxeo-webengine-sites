@@ -57,8 +57,7 @@ public class SiteUtils {
     private SiteUtils() {
     }
 
-    public static Response getLogoResponse(DocumentModel document)
-            throws ClientException {
+    public static Response getLogoResponse(DocumentModel document) throws ClientException {
         Blob blob = getBlob(document, SiteConstants.WEBCONTAINER_LOGO);
         if (blob != null) {
             return Response.ok().entity(blob).type(blob.getMimeType()).build();
@@ -69,8 +68,7 @@ public class SiteUtils {
     /**
      * Gets the first mini-site parent.
      */
-    public static DocumentModel getFirstWebSiteParent(CoreSession session,
-            DocumentModel doc) throws ClientException {
+    public static DocumentModel getFirstWebSiteParent(CoreSession session, DocumentModel doc) throws ClientException {
         List<DocumentModel> parents = session.getParentDocuments(doc.getRef());
         Collections.reverse(parents);
         for (DocumentModel currentDocumentModel : parents) {
@@ -87,11 +85,9 @@ public class SiteUtils {
     }
 
     /**
-     * Gets the number of comments added on a page (published actually, if the
-     * moderation is on).
+     * Gets the number of comments added on a page (published actually, if the moderation is on).
      */
-    public static int getNumberCommentsForPage(CoreSession session,
-            DocumentModel page) throws ClientException {
+    public static int getNumberCommentsForPage(CoreSession session, DocumentModel page) throws ClientException {
         List<DocumentModel> comments = getCommentManager().getComments(page);
         if (isCurrentModerated(session, page)) {
             List<DocumentModel> publishedComments = new ArrayList<DocumentModel>();
@@ -117,8 +113,7 @@ public class SiteUtils {
         if (principal == null) {
             return StringUtils.EMPTY;
         }
-        if (StringUtils.isEmpty(principal.getFirstName())
-                && StringUtils.isEmpty(principal.getLastName())) {
+        if (StringUtils.isEmpty(principal.getFirstName()) && StringUtils.isEmpty(principal.getLastName())) {
             return principal.toString();
         }
         return principal.getFirstName() + " " + principal.getLastName();
@@ -131,9 +126,10 @@ public class SiteUtils {
      */
     public static StringBuilder getWebContainersPath() {
         WebContext context = WebEngine.getActiveContext();
-//        StringBuilder initialPath = new StringBuilder(context.getBasePath()).append(context.getUriInfo().getMatchedURIs().get(
-//                context.getUriInfo().getMatchedURIs().size() - 1));
-//        return initialPath;
+        // StringBuilder initialPath = new
+        // StringBuilder(context.getBasePath()).append(context.getUriInfo().getMatchedURIs().get(
+        // context.getUriInfo().getMatchedURIs().size() - 1));
+        // return initialPath;
         return new StringBuilder(context.getRoot().getPath());
     }
 
@@ -144,12 +140,11 @@ public class SiteUtils {
      * @param documentModel the webPage
      * @return the path
      */
-    public static String getPagePath(DocumentModel ws,
-            DocumentModel documentModel) {
+    public static String getPagePath(DocumentModel ws, DocumentModel documentModel) {
         StringBuilder path = new StringBuilder(getWebContainersPath()).append('/');
 
         String segment = ws.getPath().segment(ws.getPath().segmentCount() - 1);
-//        segment = URLEncode(segment);
+        // segment = URLEncode(segment);
         if (ws.hasSchema(SiteConstants.WEBCONTAINER_SCHEMA)) {
             try {
                 path.append(ws.getPropertyValue(SiteConstants.WEBCONTAINER_URL)).append("/");
@@ -159,17 +154,15 @@ public class SiteUtils {
         } else {
             path.append(segment).append('/');
         }
-        path.append(URIUtils.quoteURIPathComponent(JsonAdapter.getRelativePath(ws,
-                documentModel).toString(), false));
+        path.append(URIUtils.quoteURIPathComponent(JsonAdapter.getRelativePath(ws, documentModel).toString(), false));
         return path.toString();
     }
 
     /**
      * Creates a document type that is received as parameter, as document model.
      */
-    public static DocumentModel createDocument(HttpServletRequest request,
-            CoreSession session, String parentPath, String documentType)
-            throws ClientException {
+    public static DocumentModel createDocument(HttpServletRequest request, CoreSession session, String parentPath,
+            String documentType) throws ClientException {
         PathSegmentService pss = Framework.getService(PathSegmentService.class);
         String title = request.getParameter("title");
         String pageName = request.getParameter(SiteConstants.PAGE_NAME_ATTRIBUTE);
@@ -185,20 +178,17 @@ public class SiteUtils {
         documentModel.setPropertyValue(SiteConstants.WEBPAGE_EDITOR, isRichtext);
         if (isRichtext) {
             // Is rich text editor
-            documentModel.setPropertyValue(SiteConstants.WEBPAGE_CONTENT,
-                    richtextEditor);
+            documentModel.setPropertyValue(SiteConstants.WEBPAGE_CONTENT, richtextEditor);
         } else {
             // Is wiki text editor
-            documentModel.setPropertyValue(SiteConstants.WEBPAGE_CONTENT,
-                    wikitextEditor);
+            documentModel.setPropertyValue(SiteConstants.WEBPAGE_CONTENT, wikitextEditor);
         }
-        documentModel.setPropertyValue(SiteConstants.WEBPAGE_PUSHTOMENU,
-                Boolean.valueOf(pushToMenu));
+        documentModel.setPropertyValue(SiteConstants.WEBPAGE_PUSHTOMENU, Boolean.valueOf(pushToMenu));
 
         ContextTransmitterHelper.feedContext(documentModel);
         documentModel.setPathInfo(parentPath, pss.generatePathSegment(documentModel));
         documentModel = session.createDocument(documentModel);
-        //documentModel = session.saveDocument(documentModel);
+        // documentModel = session.saveDocument(documentModel);
         session.save();
 
         return documentModel;
@@ -207,26 +197,22 @@ public class SiteUtils {
     /**
      * @return all users with a given permission for the corresponding workspace
      */
-    public static ArrayList<String> getUsersWithPermission(CoreSession session,
-            DocumentModel doc, Set<String> permissions) throws ClientException {
+    public static ArrayList<String> getUsersWithPermission(CoreSession session, DocumentModel doc,
+            Set<String> permissions) throws ClientException {
         DocumentModel parentWebSite = getFirstWebSiteParent(session, doc);
         if (parentWebSite != null) {
-            String[] moderators = parentWebSite.getACP().listUsernamesForAnyPermission(
-                    permissions);
+            String[] moderators = parentWebSite.getACP().listUsernamesForAnyPermission(permissions);
             return new ArrayList<String>(Arrays.asList(moderators));
         }
         return new ArrayList<String>();
     }
 
     /**
-     * @return true if the corresponding workspace is moderated : there is at
-     *         least one user with moderate permission on this workspace and the
-     *         moderationType is a priori
+     * @return true if the corresponding workspace is moderated : there is at least one user with moderate permission on
+     *         this workspace and the moderationType is a priori
      */
-    public static boolean isCurrentModerated(CoreSession session,
-            DocumentModel doc) throws ClientException {
-        if (!getModerationType(session, doc).equals(
-                SiteConstants.MODERATION_APRIORI)) {
+    public static boolean isCurrentModerated(CoreSession session, DocumentModel doc) throws ClientException {
+        if (!getModerationType(session, doc).equals(SiteConstants.MODERATION_APRIORI)) {
             // no moderation set
             return false;
         }
@@ -234,7 +220,7 @@ public class SiteUtils {
         // particular document, ergo Moderation permission granted
         // Rux: I leave the code just in case
         // Set<String> moderatePermissions = new HashSet<String>();
-        //moderatePermissions.addAll(Arrays.asList(session.getPermissionsToCheck
+        // moderatePermissions.addAll(Arrays.asList(session.getPermissionsToCheck
         // (
         // WebCommentsConstants.PERMISSION_MODERATE)));
         // if (getUsersWithPermission(session, doc, moderatePermissions).size()
@@ -247,10 +233,8 @@ public class SiteUtils {
     /**
      * @return true if the current user is among moderators
      */
-    public static boolean isModeratedByCurrentUser(CoreSession session,
-            DocumentModel doc) throws ClientException {
-        return session.hasPermission(doc.getRef(),
-                SiteConstants.PERMISSION_MODERATE);
+    public static boolean isModeratedByCurrentUser(CoreSession session, DocumentModel doc) throws ClientException {
+        return session.hasPermission(doc.getRef(), SiteConstants.PERMISSION_MODERATE);
     }
 
     public static CommentManager getCommentManager() {
@@ -263,10 +247,8 @@ public class SiteUtils {
      * @param comment
      * @return the <b>WebPage</b>
      */
-    public static DocumentModel getPageForComment(DocumentModel comment)
-            throws ClientException {
-        List<DocumentModel> list = getCommentManager().getDocumentsForComment(
-                comment);
+    public static DocumentModel getPageForComment(DocumentModel comment) throws ClientException {
+        List<DocumentModel> list = getCommentManager().getDocumentsForComment(comment);
         if (!list.isEmpty()) {
             DocumentModel page = list.get(0);
             if (!SiteConstants.DELETED.equals(page.getCurrentLifeCycleState())) {
@@ -279,30 +261,24 @@ public class SiteUtils {
     /**
      * @return all the moderators for the corresponding workspace
      */
-    public static ArrayList<String> getModerators(CoreSession session,
-            DocumentModel doc) throws ClientException {
+    public static ArrayList<String> getModerators(CoreSession session, DocumentModel doc) throws ClientException {
         Set<String> moderatePermissions = new HashSet<String>();
         moderatePermissions.addAll(Arrays.asList(session.getPermissionsToCheck(SiteConstants.PERMISSION_MODERATE)));
         return getUsersWithPermission(session, doc, moderatePermissions);
     }
 
     /**
-     * @return the moderation type for the corresponding workspace ; default is
-     *         aposteriori
+     * @return the moderation type for the corresponding workspace ; default is aposteriori
      */
-    public static String getModerationType(CoreSession session,
-            DocumentModel doc) throws ClientException {
+    public static String getModerationType(CoreSession session, DocumentModel doc) throws ClientException {
         DocumentModel parentWebSite = getFirstWebSiteParent(session, doc);
         if (parentWebSite != null) {
-            return getString(parentWebSite,
-                    SiteConstants.WEBCONTAINER_MODERATION,
-                    SiteConstants.MODERATION_APOSTERIORI);
+            return getString(parentWebSite, SiteConstants.WEBCONTAINER_MODERATION, SiteConstants.MODERATION_APOSTERIORI);
         }
         return SiteConstants.MODERATION_APOSTERIORI;
     }
 
-    public static String getString(DocumentModel d, String xpath,
-            String defaultValue) {
+    public static String getString(DocumentModel d, String xpath, String defaultValue) {
         try {
             return getString(d, xpath);
         } catch (ClientException e) {
@@ -310,8 +286,7 @@ public class SiteUtils {
         }
     }
 
-    public static String getString(DocumentModel d, String xpath)
-            throws ClientException {
+    public static String getString(DocumentModel d, String xpath) throws ClientException {
         Property p = d.getProperty(xpath);
         if (p != null) {
             Serializable v = p.getValue();
@@ -322,8 +297,7 @@ public class SiteUtils {
         return "";
     }
 
-    public static GregorianCalendar getGregorianCalendar(DocumentModel d,
-            String xpath) throws ClientException {
+    public static GregorianCalendar getGregorianCalendar(DocumentModel d, String xpath) throws ClientException {
         Property p = d.getProperty(xpath);
         if (p != null) {
             Serializable v = p.getValue();
@@ -345,8 +319,7 @@ public class SiteUtils {
         return new Long(0);
     }
 
-    public static Long getNumber(DocumentModel d, String xpath,
-            Long defaultValue) {
+    public static Long getNumber(DocumentModel d, String xpath, Long defaultValue) {
         try {
             return getNumber(d, xpath);
         } catch (ClientException ce) {
@@ -354,8 +327,7 @@ public class SiteUtils {
         }
     }
 
-    public static Blob getBlob(DocumentModel d, String xpath)
-            throws ClientException {
+    public static Blob getBlob(DocumentModel d, String xpath) throws ClientException {
         Property p = d.getProperty(xpath);
         if (p != null) {
             Serializable v = p.getValue();
@@ -366,8 +338,7 @@ public class SiteUtils {
         return null;
     }
 
-    public static boolean getBoolean(DocumentModel d, String xpath,
-            boolean defaultValue) {
+    public static boolean getBoolean(DocumentModel d, String xpath, boolean defaultValue) {
         try {
             return getBoolean(d, xpath);
         } catch (ClientException e) {
@@ -375,8 +346,7 @@ public class SiteUtils {
         }
     }
 
-    public static boolean getBoolean(DocumentModel d, String xpath)
-            throws ClientException {
+    public static boolean getBoolean(DocumentModel d, String xpath) throws ClientException {
         Property p = d.getProperty(xpath);
         if (p != null) {
             Serializable v = p.getValue();
@@ -401,8 +371,7 @@ public class SiteUtils {
     /**
      * Computes the arguments for rss feed.
      */
-    public static Map<String, Object> getRssFeedArguments(WebContext ctx,
-            String key) {
+    public static Map<String, Object> getRssFeedArguments(WebContext ctx, String key) {
         Map<String, Object> root = new HashMap<String, Object>();
         root.put("title", ctx.getMessage(key));
         root.put("link", " ");

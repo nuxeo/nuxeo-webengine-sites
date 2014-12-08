@@ -35,8 +35,7 @@ import org.nuxeo.ecm.webengine.rendering.RenderingExtensionDescriptor;
  * @author <a href="mailto:cbaican@nuxeo.com">Catalin Baican</a>
  */
 @XObject("rendering-extension")
-public class WikiSitesTransformerDescriptor extends
-        RenderingExtensionDescriptor {
+public class WikiSitesTransformerDescriptor extends RenderingExtensionDescriptor {
 
     @XNode("@name")
     protected void setName(String name) {
@@ -60,8 +59,7 @@ public class WikiSitesTransformerDescriptor extends
         if (serializerClass == null) {
             tr = new WikiTransformer();
         } else {
-            tr = new WikiTransformer(
-                    (WikiSerializer) serializerClass.newInstance());
+            tr = new WikiTransformer((WikiSerializer) serializerClass.newInstance());
         }
         WikiSerializer serializer = tr.getSerializer();
         for (WikiSitesFilterDescriptor wfd : filters) {
@@ -70,8 +68,7 @@ public class WikiSitesTransformerDescriptor extends
                 WikiFilter filter = (WikiFilter) clazz.newInstance();
                 serializer.addFilter(filter);
             } else {
-                serializer.addFilter(new PatternFilter(wfd.pattern,
-                        wfd.replacement));
+                serializer.addFilter(new PatternFilter(wfd.pattern, wfd.replacement));
             }
         }
         return tr;

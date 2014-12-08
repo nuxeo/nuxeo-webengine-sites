@@ -48,8 +48,8 @@ import org.nuxeo.webengine.sites.utils.ContextTransmitterHelper;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
 /**
- * Web object implementation corresponding to WebPage. It is resolved from site.
- * It holds the web page fragments back methods.
+ * Web object implementation corresponding to WebPage. It is resolved from site. It holds the web page fragments back
+ * methods.
  *
  * @author stan
  */
@@ -96,8 +96,7 @@ public class Page extends AbstractSiteDocumentObject {
             HttpServletRequest request = ctx.getRequest();
             String title = request.getParameter("title");
             String description = request.getParameter("description");
-            Boolean isRichtext = SiteUtils.getBoolean(doc, WEBPAGE_EDITOR,
-                    false);
+            Boolean isRichtext = SiteUtils.getBoolean(doc, WEBPAGE_EDITOR, false);
             String content;
             if (isRichtext) {
                 content = request.getParameter("richtextEditorEdit");
@@ -109,20 +108,17 @@ public class Page extends AbstractSiteDocumentObject {
             doc.setPropertyValue("dc:title", title);
             doc.setPropertyValue("dc:description", description);
             doc.setPropertyValue(WEBPAGE_CONTENT, content);
-            doc.setPropertyValue(WEBPAGE_PUSHTOMENU,
-                    Boolean.valueOf(pushToMenu));
+            doc.setPropertyValue(WEBPAGE_PUSHTOMENU, Boolean.valueOf(pushToMenu));
             ContextTransmitterHelper.feedContext(doc);
             session.saveDocument(doc);
             session.save();
-            DocumentModel webContainer = SiteUtils.getFirstWebSiteParent(
-                    session, doc);
+            DocumentModel webContainer = SiteUtils.getFirstWebSiteParent(session, doc);
             String path = SiteUtils.getPagePath(webContainer, doc);
             return redirect(path);
         } catch (Exception e) {
             throw WebException.wrap(e);
         }
     }
-
 
     @Override
     protected String getSchemaFieldThemeName() {

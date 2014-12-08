@@ -19,10 +19,8 @@ package org.nuxeo.webengine.sites.models;
 import org.nuxeo.theme.models.AbstractModel;
 
 /**
- * Model related to searching a certain webPage between all the pages under a
- * <b>WebSite</b> that contains in title, description , main content or
- * attached files the given searchParam. in the fragment initialization
- * mechanism.
+ * Model related to searching a certain webPage between all the pages under a <b>WebSite</b> that contains in title,
+ * description , main content or attached files the given searchParam. in the fragment initialization mechanism.
  *
  * @author rux
  */
@@ -40,8 +38,7 @@ public class SearchModel extends AbstractModel {
 
     private String modified;
 
-    public SearchModel(String name, String description, String path,
-            String author, String created, String modified) {
+    public SearchModel(String name, String description, String path, String author, String created, String modified) {
         this.name = name;
         this.description = description;
         this.path = path;

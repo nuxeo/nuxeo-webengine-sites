@@ -18,8 +18,7 @@ package org.nuxeo.webengine.blogs.models;
 import org.nuxeo.theme.models.AbstractModel;
 
 /**
- * Model related to the <b>BlogSite</b>-s archive in the fragment initialization
- * mechanism.
+ * Model related to the <b>BlogSite</b>-s archive in the fragment initialization mechanism.
  *
  * @author rux
  */
@@ -31,8 +30,7 @@ public class BlogSiteArchiveDayModel extends AbstractModel {
 
     private int totalDayCount;
 
-    public BlogSiteArchiveDayModel(String day, String fullDate,
-            Integer totalDayCount) {
+    public BlogSiteArchiveDayModel(String day, String fullDate, Integer totalDayCount) {
         this.day = day;
         this.fullDate = fullDate;
         this.totalDayCount = totalDayCount;

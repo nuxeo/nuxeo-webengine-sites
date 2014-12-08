@@ -18,8 +18,7 @@ package org.nuxeo.webengine.blogs.models;
 import org.nuxeo.theme.models.AbstractModel;
 
 /**
- * Model related to the <b>BlogSite</b>-s archive in the fragment initialization
- * mechanism.
+ * Model related to the <b>BlogSite</b>-s archive in the fragment initialization mechanism.
  *
  * @author rux
  */
@@ -31,8 +30,7 @@ public class BlogSiteArchiveYearModel extends AbstractModel {
 
     private int totalYearCount;
 
-    public BlogSiteArchiveYearModel(String yearLong, String path,
-            Integer totalYearCount) {
+    public BlogSiteArchiveYearModel(String yearLong, String path, Integer totalYearCount) {
         this.yearLong = yearLong;
         this.path = path;
         this.totalYearCount = totalYearCount;

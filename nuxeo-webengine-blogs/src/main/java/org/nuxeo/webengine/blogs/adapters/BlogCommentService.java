@@ -22,8 +22,7 @@ import org.nuxeo.ecm.webengine.model.WebAdapter;
 import org.nuxeo.webengine.sites.webcomments.WebCommentService;
 
 /**
- * Blog Comment Service - extension of base's WebCommentService with specifics
- * of sites module.
+ * Blog Comment Service - extension of base's WebCommentService with specifics of sites module.
  *
  * @author rux
  */
@@ -31,14 +30,14 @@ import org.nuxeo.webengine.sites.webcomments.WebCommentService;
 public class BlogCommentService extends WebCommentService {
 
     @Override
-    protected DocumentModel createCommentDocument(CoreSession session,
-            DocumentModel target, DocumentModel comment) throws ClientException {
+    protected DocumentModel createCommentDocument(CoreSession session, DocumentModel target, DocumentModel comment)
+            throws ClientException {
         return super.createCommentDocument(session, target, comment);
     }
 
     @Override
-    protected void publishComment(CoreSession session, DocumentModel target,
-            DocumentModel comment) throws ClientException {
+    protected void publishComment(CoreSession session, DocumentModel target, DocumentModel comment)
+            throws ClientException {
         super.publishComment(session, target, comment);
     }
 

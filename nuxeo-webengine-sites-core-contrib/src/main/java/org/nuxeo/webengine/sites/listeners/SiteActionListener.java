@@ -41,8 +41,8 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 public class SiteActionListener implements EventListener {
 
     /**
-     * Sets the url field and the site name (if not already set) to the name,
-     * respectively the title of the document model.
+     * Sets the url field and the site name (if not already set) to the name, respectively the title of the document
+     * model.
      */
     public void handleEvent(Event event) throws ClientException {
         String eventId = event.getName();
@@ -67,10 +67,9 @@ public class SiteActionListener implements EventListener {
         if (ABOUT_TO_CREATE.equals(eventId)) {
             String url = doc.getName();
             url = URIUtils.quoteURIPathComponent(url, false);
-            String documentWithSameURLQuery = "SELECT * FROM DOCUMENT where "
-                    + WEBCONTAINER_URL + " STARTSWITH \"" + url + "\"";
-            DocumentModelList documentWithSameURL = docCtx.getCoreSession().query(
-                    documentWithSameURLQuery);
+            String documentWithSameURLQuery = "SELECT * FROM DOCUMENT where " + WEBCONTAINER_URL + " STARTSWITH \""
+                    + url + "\"";
+            DocumentModelList documentWithSameURL = docCtx.getCoreSession().query(documentWithSameURLQuery);
             if (!documentWithSameURL.isEmpty()) {
                 // FIXME: this is not right
                 int sameName = 0;

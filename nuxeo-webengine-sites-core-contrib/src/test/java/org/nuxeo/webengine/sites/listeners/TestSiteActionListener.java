@@ -38,8 +38,7 @@ public class TestSiteActionListener extends SQLRepositoryTestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        deployContrib("org.nuxeo.ecm.platform.webengine.sites.core.contrib",
-                "OSGI-INF/core-types-contrib.xml");
+        deployContrib("org.nuxeo.ecm.platform.webengine.sites.core.contrib", "OSGI-INF/core-types-contrib.xml");
         deployContrib("org.nuxeo.ecm.platform.webengine.sites.core.contrib",
                 "OSGI-INF/webengine-sites-listener-contrib.xml");
         openSession();
@@ -67,8 +66,7 @@ public class TestSiteActionListener extends SQLRepositoryTestCase {
     }
 
     @Test
-    public void testTestSiteActionWithWebSiteNotInTheSameContainer()
-            throws ClientException {
+    public void testTestSiteActionWithWebSiteNotInTheSameContainer() throws ClientException {
         DocumentModel folder1 = session.createDocumentModel("Folder");
         folder1.setPathInfo("/", "folder1");
         session.createDocument(folder1);

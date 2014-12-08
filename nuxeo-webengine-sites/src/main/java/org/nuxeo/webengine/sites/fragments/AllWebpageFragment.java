@@ -30,16 +30,15 @@ import org.nuxeo.webengine.sites.utils.SiteConstants;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
 /**
- * Action fragment for initializing the fragment related to the <b>WebPage</b>-s
- * that are direct children of the received document.
+ * Action fragment for initializing the fragment related to the <b>WebPage</b>-s that are direct children of the
+ * received document.
  *
  * @author rux
  */
 public class AllWebpageFragment extends AbstractFragment {
 
     /**
-     * Returns all the <b>WebPage</b>-s that are direct children of the received
-     * document.
+     * Returns all the <b>WebPage</b>-s that are direct children of the received document.
      */
     @Override
     public Model getModel() throws ModelException {
@@ -47,14 +46,11 @@ public class AllWebpageFragment extends AbstractFragment {
         if (WebEngine.getActiveContext() != null) {
             WebContext ctx = WebEngine.getActiveContext();
             CoreSession session = ctx.getCoreSession();
-            DocumentModel documentModel = ctx.getTargetObject().getAdapter(
-                    DocumentModel.class);
+            DocumentModel documentModel = ctx.getTargetObject().getAdapter(DocumentModel.class);
 
             try {
-                for (DocumentModel webPage : session.getChildren(
-                        documentModel.getRef(), SiteConstants.WEBPAGE)) {
-                    if (!webPage.getCurrentLifeCycleState().equals(
-                            SiteConstants.DELETED)) {
+                for (DocumentModel webPage : session.getChildren(documentModel.getRef(), SiteConstants.WEBPAGE)) {
+                    if (!webPage.getCurrentLifeCycleState().equals(SiteConstants.DELETED)) {
                         String name = SiteUtils.getString(webPage, "dc:title");
                         String path = URIUtils.quoteURIPathComponent(webPage.getName(), false);
                         WebpageModel webpageModel = new WebpageModel(name, path);

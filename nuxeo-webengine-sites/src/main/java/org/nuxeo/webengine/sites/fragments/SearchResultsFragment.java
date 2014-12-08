@@ -47,19 +47,17 @@ import org.nuxeo.webengine.sites.utils.SiteQueriesCollection;
 import org.nuxeo.webengine.sites.utils.SiteUtils;
 
 /**
- * Action fragment for initializing the fragment : related to searching a
- * certain webPage between all the pages under a <b>WebSite</b> that contains in
- * title, description , main content or attached files the given searchParam, or
- * related to searching all the documents for a certain tag.
+ * Action fragment for initializing the fragment : related to searching a certain webPage between all the pages under a
+ * <b>WebSite</b> that contains in title, description , main content or attached files the given searchParam, or related
+ * to searching all the documents for a certain tag.
  */
 public class SearchResultsFragment extends AbstractFragment {
 
     private static final int nrWordsFromDescription = 50;
 
     /**
-     * Searches a certain webPage between all the pages under a <b>WebSite</b>
-     * that contains in title, description , main content or attached files the
-     * given searchParam.
+     * Searches a certain webPage between all the pages under a <b>WebSite</b> that contains in title, description ,
+     * main content or attached files the given searchParam.
      */
     @Override
     public Model getModel() throws ModelException {
@@ -68,8 +66,7 @@ public class SearchResultsFragment extends AbstractFragment {
             if (WebEngine.getActiveContext() != null) {
                 WebContext ctx = WebEngine.getActiveContext();
                 CoreSession session = ctx.getCoreSession();
-                DocumentModel documentModel = ctx.getTargetObject().getAdapter(
-                        DocumentModel.class);
+                DocumentModel documentModel = ctx.getTargetObject().getAdapter(DocumentModel.class);
 
                 String searchParam = (String) ctx.getProperty(SEARCH_PARAM);
                 String tagDocumentId = (String) ctx.getProperty(TAG_DOCUMENT);
@@ -81,27 +78,21 @@ public class SearchResultsFragment extends AbstractFragment {
                 TagService tagService = Framework.getService(TagService.class);
 
                 // get first workspace parent
-                DocumentModel ws = SiteUtils.getFirstWebSiteParent(session,
-                        documentModel);
-                DocumentModelList results = new DocumentModelListImpl(
-                        new ArrayList<DocumentModel>());
-                if ((!StringUtils.isEmpty(searchParam) || (dateAfter != null && dateBefore != null))
-                        && ws != null && StringUtils.isEmpty(tagDocumentId)) {
+                DocumentModel ws = SiteUtils.getFirstWebSiteParent(session, documentModel);
+                DocumentModelList results = new DocumentModelListImpl(new ArrayList<DocumentModel>());
+                if ((!StringUtils.isEmpty(searchParam) || (dateAfter != null && dateBefore != null)) && ws != null
+                        && StringUtils.isEmpty(tagDocumentId)) {
 
-                    results = SiteQueriesCollection.querySearchPages(session,
-                            searchParam, ws.getPathAsString(), documentType,
-                            dateAfter, dateBefore);
+                    results = SiteQueriesCollection.querySearchPages(session, searchParam, ws.getPathAsString(),
+                            documentType, dateAfter, dateBefore);
                 }
 
-                if (StringUtils.isEmpty(searchParam)
-                        && StringUtils.isNotEmpty(tagDocumentId)) {
+                if (StringUtils.isEmpty(searchParam) && StringUtils.isNotEmpty(tagDocumentId)) {
                     // TODO only search under website ws
-                    List<String> docIds = tagService.getTagDocumentIds(session,
-                            tagDocumentId, null);
+                    List<String> docIds = tagService.getTagDocumentIds(session, tagDocumentId, null);
                     for (String docId : docIds) {
                         DocumentModel doc = session.getDocument(new IdRef(docId));
-                        DocumentModel webSite = SiteUtils.getFirstWebSiteParent(
-                                session, doc);
+                        DocumentModel webSite = SiteUtils.getFirstWebSiteParent(session, doc);
                         if (ws.equals(webSite)) {
                             results.add(session.getDocument(new IdRef(docId)));
                         }
@@ -109,27 +100,21 @@ public class SearchResultsFragment extends AbstractFragment {
                 }
 
                 for (DocumentModel document : results) {
-                    GregorianCalendar date = SiteUtils.getGregorianCalendar(
-                            document, "dc:created");
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-                            "dd MMMM yyyy",
+                    GregorianCalendar date = SiteUtils.getGregorianCalendar(document, "dc:created");
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy",
                             WebEngine.getActiveContext().getLocale());
                     String created = simpleDateFormat.format(date.getTime());
 
-                    date = SiteUtils.getGregorianCalendar(document,
-                            "dc:modified");
+                    date = SiteUtils.getGregorianCalendar(document, "dc:modified");
                     String modified = simpleDateFormat.format(date.getTime());
 
-                    String author = SiteUtils.getUserDetails(SiteUtils.getString(
-                            document, "dc:creator"));
+                    String author = SiteUtils.getUserDetails(SiteUtils.getString(document, "dc:creator"));
                     String path = SiteUtils.getPagePath(ws, document);
                     String name = SiteUtils.getString(document, "dc:title");
                     String description = SiteUtils.getFistNWordsFromString(
-                            SiteUtils.getString(document, "dc:description"),
-                            nrWordsFromDescription);
+                            SiteUtils.getString(document, "dc:description"), nrWordsFromDescription);
 
-                    SearchModel searchModel = new SearchModel(name,
-                            description, path, author, created, modified);
+                    SearchModel searchModel = new SearchModel(name, description, path, author, created, modified);
                     model.addItem(searchModel);
                 }
 

@@ -19,8 +19,7 @@ package org.nuxeo.webengine.sites.models;
 import org.nuxeo.theme.models.AbstractModel;
 
 /**
- * Model related to the <b>WebPage</b>-s in the fragment initialization
- * mechanism.
+ * Model related to the <b>WebPage</b>-s in the fragment initialization mechanism.
  *
  * @author rux
  */

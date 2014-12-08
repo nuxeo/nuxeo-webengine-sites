@@ -24,7 +24,6 @@ import org.nuxeo.common.xmap.annotation.XObject;
 
 /**
  * @author <a href="mailto:cbaican@nuxeo.com">Catalin Baican</a>
- *
  */
 @XObject("filter")
 public class WikiSitesFilterDescriptor {
