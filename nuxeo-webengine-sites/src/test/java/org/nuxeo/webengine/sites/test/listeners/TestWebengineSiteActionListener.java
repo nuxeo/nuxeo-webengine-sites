@@ -18,16 +18,26 @@
 
 package org.nuxeo.webengine.sites.test.listeners;
 
-import org.junit.Before;
-import org.junit.After;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
+import javax.inject.Inject;
 
 import org.apache.commons.lang.StringUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.nuxeo.common.utils.IdUtils;
 import org.nuxeo.common.utils.URIUtils;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.storage.sql.SQLRepositoryTestCase;
+import org.nuxeo.ecm.core.test.CoreFeature;
+import org.nuxeo.ecm.core.test.TransactionalFeature;
+import org.nuxeo.ecm.core.test.annotations.Granularity;
+import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
+import org.nuxeo.runtime.test.runner.Deploy;
+import org.nuxeo.runtime.test.runner.Features;
+import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import org.nuxeo.runtime.test.runner.LocalDeploy;
 import org.nuxeo.webengine.sites.utils.SiteConstants;
 
 /**
@@ -35,35 +45,15 @@ import org.nuxeo.webengine.sites.utils.SiteConstants;
  *
  * @author rux
  */
-public class TestWebengineSiteActionListener extends SQLRepositoryTestCase {
+@RunWith(FeaturesRunner.class)
+@Features({ TransactionalFeature.class, CoreFeature.class })
+@RepositoryConfig(cleanup = Granularity.METHOD)
+@Deploy("org.nuxeo.ecm.platform.webengine.sites.core.contrib")
+@LocalDeploy("org.nuxeo.ecm.platform.webengine.sites.tests:OSGI-INF/ecm-types-contrib.xml")
+public class TestWebengineSiteActionListener {
 
-    public TestWebengineSiteActionListener() {
-        super();
-    }
-
-    protected TestWebengineSiteActionListener(String name) {
-        super(name);
-    }
-
-    @Override
-    @Before
-    public void setUp() throws Exception {
-        String bundleFile = "org.nuxeo.ecm.platform.webengine.sites.tests";
-
-        super.setUp();
-
-        deployBundle("org.nuxeo.ecm.platform.webengine.sites.core.contrib");
-        deployContrib(bundleFile, "OSGI-INF/ecm-types-contrib.xml");
-
-        openSession();
-    }
-
-    @Override
-    @After
-    public void tearDown() throws Exception {
-        closeSession();
-        super.tearDown();
-    }
+    @Inject
+    protected CoreSession session;
 
     @Test
     public void testSiteActionListenerWorkspace() throws Exception {

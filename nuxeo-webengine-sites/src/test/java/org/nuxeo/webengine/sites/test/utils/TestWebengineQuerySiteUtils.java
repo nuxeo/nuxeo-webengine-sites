@@ -18,22 +18,32 @@
 
 package org.nuxeo.webengine.sites.test.utils;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.nuxeo.webengine.sites.utils.SiteConstants.WEBPAGE;
 import static org.nuxeo.webengine.sites.utils.SiteConstants.WEBSITE;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.After;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import javax.inject.Inject;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.nuxeo.common.utils.IdUtils;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.storage.sql.SQLRepositoryTestCase;
+import org.nuxeo.ecm.core.test.CoreFeature;
+import org.nuxeo.ecm.core.test.TransactionalFeature;
+import org.nuxeo.ecm.core.test.annotations.Granularity;
+import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.comment.api.CommentManager;
 import org.nuxeo.ecm.platform.comment.service.CommentService;
 import org.nuxeo.ecm.platform.comment.service.CommentServiceHelper;
+import org.nuxeo.runtime.test.runner.Deploy;
+import org.nuxeo.runtime.test.runner.Features;
+import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import org.nuxeo.runtime.test.runner.LocalDeploy;
 import org.nuxeo.webengine.sites.utils.SiteQueriesCollection;
 
 /**
@@ -41,7 +51,18 @@ import org.nuxeo.webengine.sites.utils.SiteQueriesCollection;
  *
  * @author mcedica
  */
-public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
+@RunWith(FeaturesRunner.class)
+@Features({ TransactionalFeature.class, CoreFeature.class })
+@RepositoryConfig(cleanup = Granularity.METHOD)
+@Deploy({ "org.nuxeo.ecm.relations", //
+        "org.nuxeo.ecm.platform.comment", //
+        "org.nuxeo.ecm.platform.webengine.sites.api", //
+})
+@LocalDeploy({ "org.nuxeo.ecm.platform.webengine.sites.tests:OSGI-INF/jena-test-bundle.xml",
+        "org.nuxeo.ecm.platform.webengine.sites.tests:OSGI-INF/comment-jena-contrib.xml",
+        "org.nuxeo.ecm.platform.webengine.sites.core.contrib:OSGI-INF/core-types-contrib.xml",
+        "org.nuxeo.ecm.platform.webengine.sites.core.contrib:OSGI-INF/permissions-contrib.xml" })
+public class TestWebengineQuerySiteUtils {
 
     private static final String workspaceSiteTitle = "Test Mini Site";
 
@@ -55,6 +76,9 @@ public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
 
     private static final String webSiteUrl = "testWebSiteUrl";
 
+    @Inject
+    protected CoreSession session;
+
     private DocumentModel workspaceSite;
 
     private DocumentModel webSite;
@@ -67,40 +91,9 @@ public class TestWebengineQuerySiteUtils extends SQLRepositoryTestCase {
 
     private DocumentModel webCommentForWebSite;
 
-    public TestWebengineQuerySiteUtils() {
-        super();
-    }
-
-    protected TestWebengineQuerySiteUtils(String name) {
-        super(name);
-    }
-
-    @Override
     @Before
     public void setUp() throws Exception {
-        String bundleFile = "org.nuxeo.ecm.platform.webengine.sites.tests";
-
-        super.setUp();
-        deployBundle("org.nuxeo.ecm.relations");
-        deployContrib(bundleFile, "OSGI-INF/jena-test-bundle.xml");
-        deployBundle("org.nuxeo.ecm.platform.comment");
-        deployContrib(bundleFile, "OSGI-INF/comment-jena-contrib.xml");
-        deployBundle("org.nuxeo.ecm.platform.webengine.sites.api");
-        deployContrib("org.nuxeo.ecm.platform.webengine.sites.core.contrib", "OSGI-INF/core-types-contrib.xml");
-        deployContrib("org.nuxeo.ecm.platform.webengine.sites.core.contrib", "OSGI-INF/permissions-contrib.xml");
-
-        // deployBundle("org.nuxeo.ecm.platform.webengine.sites.core.contrib");
-
-        openSession();
         initializeTestData();
-    }
-
-    @Override
-    @After
-    public void tearDown() throws Exception {
-        session.cancel();
-        closeSession();
-        super.tearDown();
     }
 
     protected void createSites() throws Exception {
