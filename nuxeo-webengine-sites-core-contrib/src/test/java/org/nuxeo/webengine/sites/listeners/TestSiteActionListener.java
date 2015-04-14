@@ -17,32 +17,39 @@
 
 package org.nuxeo.webengine.sites.listeners;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.nuxeo.webengine.sites.utils.SiteConstants.WEBCONTAINER_URL;
+
+import javax.inject.Inject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
-import org.nuxeo.ecm.core.storage.sql.SQLRepositoryTestCase;
+import org.nuxeo.ecm.core.test.CoreFeature;
+import org.nuxeo.ecm.core.test.TransactionalFeature;
+import org.nuxeo.ecm.core.test.annotations.Granularity;
+import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
+import org.nuxeo.runtime.test.runner.Features;
+import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import org.nuxeo.runtime.test.runner.LocalDeploy;
 
-import static org.nuxeo.webengine.sites.utils.SiteConstants.WEBCONTAINER_URL;
-
-public class TestSiteActionListener extends SQLRepositoryTestCase {
+@RunWith(FeaturesRunner.class)
+@Features({ TransactionalFeature.class, CoreFeature.class })
+@RepositoryConfig(cleanup = Granularity.METHOD)
+@LocalDeploy({ "org.nuxeo.ecm.platform.webengine.sites.core.contrib:OSGI-INF/core-types-contrib.xml",
+        "org.nuxeo.ecm.platform.webengine.sites.core.contrib:OSGI-INF/webengine-sites-listener-contrib.xml" })
+public class TestSiteActionListener {
 
     protected Log log = LogFactory.getLog(TestSiteActionListener.class);
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-
-        deployContrib("org.nuxeo.ecm.platform.webengine.sites.core.contrib", "OSGI-INF/core-types-contrib.xml");
-        deployContrib("org.nuxeo.ecm.platform.webengine.sites.core.contrib",
-                "OSGI-INF/webengine-sites-listener-contrib.xml");
-        openSession();
-    }
+    @Inject
+    protected CoreSession session;
 
     @Test
     public void testTestSiteAction() throws ClientException {
