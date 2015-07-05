@@ -52,7 +52,7 @@ public class TestSiteActionListener {
     protected CoreSession session;
 
     @Test
-    public void testTestSiteAction() throws ClientException {
+    public void testTestSiteAction() {
         DocumentModel website1 = session.createDocumentModel("WebSite");
         website1.setPathInfo("/", "website");
         website1 = session.createDocument(website1);
@@ -73,7 +73,7 @@ public class TestSiteActionListener {
     }
 
     @Test
-    public void testTestSiteActionWithWebSiteNotInTheSameContainer() throws ClientException {
+    public void testTestSiteActionWithWebSiteNotInTheSameContainer() {
         DocumentModel folder1 = session.createDocumentModel("Folder");
         folder1.setPathInfo("/", "folder1");
         session.createDocument(folder1);

@@ -162,7 +162,7 @@ public class SiteActionsBean {
     }
 
     private DocumentModelList querySitesByUrlAndDocType(CoreSession session, String url, String documentType)
-            throws ClientException {
+            {
         QuerySitesUnrestricted unrestrictedRunner = new QuerySitesUnrestricted(session, documentType, url);
         unrestrictedRunner.runUnrestricted();
         return unrestrictedRunner.getResultList();
@@ -184,7 +184,7 @@ public class SiteActionsBean {
         }
 
         @Override
-        public void run() throws ClientException {
+        public void run() {
             String queryString = String.format("SELECT * FROM %s WHERE "
                     + "ecm:mixinType = 'WebView' AND webc:url = \"%s\" AND "
                     + "ecm:isCheckedInVersion = 0 AND ecm:isProxy = 0 " + "AND ecm:currentLifeCycleState != 'deleted' "

@@ -30,7 +30,7 @@ public class BlogQueriesCollection {
     /**
      * Queries all blog posts within a blog site.
      */
-    public static DocumentModelList getAllBlogPosts(CoreSession session, String parent) throws ClientException {
+    public static DocumentModelList getAllBlogPosts(CoreSession session, String parent) {
         String queryString = String.format("SELECT * FROM BlogPost WHERE " + "ecm:path STARTSWITH '%s' "
                 + "AND ecm:isCheckedInVersion = 0 AND ecm:isProxy = 0 " + "AND ecm:currentLifeCycleState != 'deleted' "
                 + "ORDER BY dc:modified ASC", parent);

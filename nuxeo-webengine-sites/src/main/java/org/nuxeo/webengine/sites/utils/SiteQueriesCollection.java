@@ -41,7 +41,7 @@ public class SiteQueriesCollection {
      * Queries sites by URL and document type. It should be exactly one returned.
      */
     public static DocumentModelList querySitesByUrlAndDocType(CoreSession session, final String url, String documentType)
-            throws ClientException {
+            {
         String queryString = String.format("SELECT * FROM %s WHERE " + "ecm:mixinType = 'WebView' AND "
                 + "ecm:isCheckedInVersion = 0 AND ecm:isProxy = 0 " + "AND ecm:currentLifeCycleState != 'deleted' "
                 + "AND webc:isWebContainer = 1", documentType);
@@ -68,7 +68,7 @@ public class SiteQueriesCollection {
      * Queries sites unrestricted by URL and document type. It should be exactly one returned.
      */
     public static boolean checkUnrestrictedSiteExistenceByUrlAndDocType(CoreSession session, String url,
-            String documentType) throws ClientException {
+            String documentType) {
         String queryString = String.format("SELECT * FROM %s WHERE "
                 + "ecm:mixinType = 'WebView' AND webc:url = \"%s\" AND "
                 + "ecm:isCheckedInVersion = 0 AND ecm:isProxy = 0 " + "AND ecm:currentLifeCycleState != 'deleted' "
@@ -81,7 +81,7 @@ public class SiteQueriesCollection {
     /**
      * Queries all sites of the given document type.
      */
-    public static DocumentModelList queryAllSites(CoreSession session, String documentType) throws ClientException {
+    public static DocumentModelList queryAllSites(CoreSession session, String documentType) {
         String queryString = String.format("SELECT * FROM %s WHERE " + "ecm:mixinType = 'WebView' AND "
                 + "ecm:isCheckedInVersion = 0 AND ecm:isProxy = 0 " + "AND ecm:currentLifeCycleState != 'deleted' "
                 + "AND webc:isWebContainer = 1", documentType);
@@ -92,7 +92,7 @@ public class SiteQueriesCollection {
      * Queries the modified pages within a limit.
      */
     public static DocumentModelList queryLastModifiedPages(CoreSession session, String parent, String documentType,
-            int numberLimit) throws ClientException {
+            int numberLimit) {
         String queryString = String.format("SELECT * FROM %s WHERE " + "ecm:path STARTSWITH '%s' "
                 + "AND ecm:isCheckedInVersion = 0 AND ecm:isProxy = 0 " + "AND ecm:currentLifeCycleState != 'deleted' "
                 + "ORDER BY dc:modified DESC", documentType, parent);
@@ -103,7 +103,7 @@ public class SiteQueriesCollection {
      * Queries the added comments within a limit. Query differs if moderated or not.
      */
     public static DocumentModelList queryLastComments(CoreSession session, String parent, int numberLimit,
-            boolean isModerated) throws ClientException {
+            boolean isModerated) {
         String queryString;
         if (isModerated) {
             queryString = String.format("SELECT * FROM Document WHERE "
@@ -123,7 +123,7 @@ public class SiteQueriesCollection {
      * Queries the pages based on a search string.
      */
     public static DocumentModelList querySearchPages(CoreSession session, String query, String parent,
-            String documentType, String dateAfter, String dateBefore) throws ClientException {
+            String documentType, String dateAfter, String dateBefore) {
         StringBuilder queryString = new StringBuilder(String.format("SELECT * FROM %s WHERE "
                 + "ecm:path STARTSWITH  '%s' AND " + "ecm:mixinType != 'HiddenInNavigation' AND "
                 + "ecm:isCheckedInVersion = 0 AND " + "ecm:currentLifeCycleState != 'deleted'", documentType, parent));
@@ -148,7 +148,7 @@ public class SiteQueriesCollection {
         }
 
         @Override
-        public void run() throws ClientException {
+        public void run() {
             results = session.query(queryString);
         }
 

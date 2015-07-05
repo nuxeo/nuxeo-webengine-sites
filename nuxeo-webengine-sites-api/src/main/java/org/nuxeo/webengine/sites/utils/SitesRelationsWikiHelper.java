@@ -58,7 +58,7 @@ public class SitesRelationsWikiHelper {
     private SitesRelationsWikiHelper() {
     }
 
-    public static void updateRelations(DocumentModel doc, List<String> linksList) throws ClientException {
+    public static void updateRelations(DocumentModel doc, List<String> linksList) {
         List<String> list = getWordLinks(doc);
 
         List<Statement> stmts = RelationHelper.getStatements(doc, HAS_LINK_TO);
