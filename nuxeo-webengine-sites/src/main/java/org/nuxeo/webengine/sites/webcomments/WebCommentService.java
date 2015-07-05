@@ -34,7 +34,7 @@ public class WebCommentService extends CommentService {
 
     @Override
     protected DocumentModel createCommentDocument(CoreSession session, DocumentModel target, DocumentModel comment)
-            throws ClientException {
+            {
         DocumentModel site = SiteUtils.getFirstWebSiteParent(session, target);
         if (site == null) {
             return super.createCommentDocument(session, target, comment);
@@ -45,7 +45,7 @@ public class WebCommentService extends CommentService {
 
     @Override
     protected void publishComment(CoreSession session, DocumentModel target, DocumentModel comment)
-            throws ClientException {
+            {
         // CommentsModerationService commentsModerationService = getCommentsModerationService();
         if (SiteUtils.isCurrentModerated(session, target) && !SiteUtils.isModeratedByCurrentUser(session, target)) {
             // if current page is moderated

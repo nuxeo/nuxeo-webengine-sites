@@ -57,7 +57,7 @@ public class SiteUtils {
     private SiteUtils() {
     }
 
-    public static Response getLogoResponse(DocumentModel document) throws ClientException {
+    public static Response getLogoResponse(DocumentModel document) {
         Blob blob = getBlob(document, SiteConstants.WEBCONTAINER_LOGO);
         if (blob != null) {
             return Response.ok().entity(blob).type(blob.getMimeType()).build();
@@ -68,7 +68,7 @@ public class SiteUtils {
     /**
      * Gets the first mini-site parent.
      */
-    public static DocumentModel getFirstWebSiteParent(CoreSession session, DocumentModel doc) throws ClientException {
+    public static DocumentModel getFirstWebSiteParent(CoreSession session, DocumentModel doc) {
         List<DocumentModel> parents = session.getParentDocuments(doc.getRef());
         Collections.reverse(parents);
         for (DocumentModel currentDocumentModel : parents) {
@@ -87,7 +87,7 @@ public class SiteUtils {
     /**
      * Gets the number of comments added on a page (published actually, if the moderation is on).
      */
-    public static int getNumberCommentsForPage(CoreSession session, DocumentModel page) throws ClientException {
+    public static int getNumberCommentsForPage(CoreSession session, DocumentModel page) {
         List<DocumentModel> comments = getCommentManager().getComments(page);
         if (isCurrentModerated(session, page)) {
             List<DocumentModel> publishedComments = new ArrayList<DocumentModel>();
@@ -107,7 +107,7 @@ public class SiteUtils {
      *
      * @return user first name + user last name
      */
-    public static String getUserDetails(String username) throws ClientException {
+    public static String getUserDetails(String username) {
         UserManager userManager = Framework.getService(UserManager.class);
         NuxeoPrincipal principal = userManager.getPrincipal(username);
         if (principal == null) {
@@ -162,7 +162,7 @@ public class SiteUtils {
      * Creates a document type that is received as parameter, as document model.
      */
     public static DocumentModel createDocument(HttpServletRequest request, CoreSession session, String parentPath,
-            String documentType) throws ClientException {
+            String documentType) {
         PathSegmentService pss = Framework.getService(PathSegmentService.class);
         String title = request.getParameter("title");
         String pageName = request.getParameter(SiteConstants.PAGE_NAME_ATTRIBUTE);
@@ -198,7 +198,7 @@ public class SiteUtils {
      * @return all users with a given permission for the corresponding workspace
      */
     public static ArrayList<String> getUsersWithPermission(CoreSession session, DocumentModel doc,
-            Set<String> permissions) throws ClientException {
+            Set<String> permissions) {
         DocumentModel parentWebSite = getFirstWebSiteParent(session, doc);
         if (parentWebSite != null) {
             String[] moderators = parentWebSite.getACP().listUsernamesForAnyPermission(permissions);
@@ -211,7 +211,7 @@ public class SiteUtils {
      * @return true if the corresponding workspace is moderated : there is at least one user with moderate permission on
      *         this workspace and the moderationType is a priori
      */
-    public static boolean isCurrentModerated(CoreSession session, DocumentModel doc) throws ClientException {
+    public static boolean isCurrentModerated(CoreSession session, DocumentModel doc) {
         if (!getModerationType(session, doc).equals(SiteConstants.MODERATION_APRIORI)) {
             // no moderation set
             return false;
@@ -233,7 +233,7 @@ public class SiteUtils {
     /**
      * @return true if the current user is among moderators
      */
-    public static boolean isModeratedByCurrentUser(CoreSession session, DocumentModel doc) throws ClientException {
+    public static boolean isModeratedByCurrentUser(CoreSession session, DocumentModel doc) {
         return session.hasPermission(doc.getRef(), SiteConstants.PERMISSION_MODERATE);
     }
 
@@ -247,7 +247,7 @@ public class SiteUtils {
      * @param comment
      * @return the <b>WebPage</b>
      */
-    public static DocumentModel getPageForComment(DocumentModel comment) throws ClientException {
+    public static DocumentModel getPageForComment(DocumentModel comment) {
         List<DocumentModel> list = getCommentManager().getDocumentsForComment(comment);
         if (!list.isEmpty()) {
             DocumentModel page = list.get(0);
@@ -261,7 +261,7 @@ public class SiteUtils {
     /**
      * @return all the moderators for the corresponding workspace
      */
-    public static ArrayList<String> getModerators(CoreSession session, DocumentModel doc) throws ClientException {
+    public static ArrayList<String> getModerators(CoreSession session, DocumentModel doc) {
         Set<String> moderatePermissions = new HashSet<String>();
         moderatePermissions.addAll(Arrays.asList(session.getPermissionsToCheck(SiteConstants.PERMISSION_MODERATE)));
         return getUsersWithPermission(session, doc, moderatePermissions);
@@ -270,7 +270,7 @@ public class SiteUtils {
     /**
      * @return the moderation type for the corresponding workspace ; default is aposteriori
      */
-    public static String getModerationType(CoreSession session, DocumentModel doc) throws ClientException {
+    public static String getModerationType(CoreSession session, DocumentModel doc) {
         DocumentModel parentWebSite = getFirstWebSiteParent(session, doc);
         if (parentWebSite != null) {
             return getString(parentWebSite, SiteConstants.WEBCONTAINER_MODERATION, SiteConstants.MODERATION_APOSTERIORI);
@@ -286,7 +286,7 @@ public class SiteUtils {
         }
     }
 
-    public static String getString(DocumentModel d, String xpath) throws ClientException {
+    public static String getString(DocumentModel d, String xpath) {
         Property p = d.getProperty(xpath);
         if (p != null) {
             Serializable v = p.getValue();
@@ -297,7 +297,7 @@ public class SiteUtils {
         return "";
     }
 
-    public static GregorianCalendar getGregorianCalendar(DocumentModel d, String xpath) throws ClientException {
+    public static GregorianCalendar getGregorianCalendar(DocumentModel d, String xpath) {
         Property p = d.getProperty(xpath);
         if (p != null) {
             Serializable v = p.getValue();
@@ -308,7 +308,7 @@ public class SiteUtils {
         return null;
     }
 
-    public static Long getNumber(DocumentModel d, String xpath) throws ClientException {
+    public static Long getNumber(DocumentModel d, String xpath) {
         Property p = d.getProperty(xpath);
         if (p != null) {
             Serializable v = p.getValue();
@@ -327,7 +327,7 @@ public class SiteUtils {
         }
     }
 
-    public static Blob getBlob(DocumentModel d, String xpath) throws ClientException {
+    public static Blob getBlob(DocumentModel d, String xpath) {
         Property p = d.getProperty(xpath);
         if (p != null) {
             Serializable v = p.getValue();
@@ -346,7 +346,7 @@ public class SiteUtils {
         }
     }
 
-    public static boolean getBoolean(DocumentModel d, String xpath) throws ClientException {
+    public static boolean getBoolean(DocumentModel d, String xpath) {
         Property p = d.getProperty(xpath);
         if (p != null) {
             Serializable v = p.getValue();

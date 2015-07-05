@@ -444,7 +444,7 @@ public abstract class AbstractSiteDocumentObject extends DocumentObject {
         this.forceRedirectToLogout = redirectToLogout;
     }
 
-    protected PluggableAuthenticationService initAuthenticationService() throws ClientException {
+    protected PluggableAuthenticationService initAuthenticationService() {
         PluggableAuthenticationService service = (PluggableAuthenticationService) Framework.getRuntime().getComponent(
                 PluggableAuthenticationService.NAME);
         if (service == null) {

@@ -44,7 +44,7 @@ public class SiteActionListener implements EventListener {
      * Sets the url field and the site name (if not already set) to the name, respectively the title of the document
      * model.
      */
-    public void handleEvent(Event event) throws ClientException {
+    public void handleEvent(Event event) {
         String eventId = event.getName();
 
         DocumentEventContext docCtx;

@@ -147,7 +147,7 @@ public class RssAdapter extends DefaultAdapter {
         }
     }
 
-    private String getWebSiteDocumentType() throws ClientException {
+    private String getWebSiteDocumentType() {
         try {
             return (String) getTarget().getClass().getMethod("getWebSiteDocumentType").invoke(getTarget());
         } catch (Exception e) {
@@ -155,7 +155,7 @@ public class RssAdapter extends DefaultAdapter {
         }
     }
 
-    private String getWebPageDocumentType() throws ClientException {
+    private String getWebPageDocumentType() {
         try {
             return (String) getTarget().getClass().getMethod("getWebPageDocumentType").invoke(getTarget());
         } catch (Exception e) {
