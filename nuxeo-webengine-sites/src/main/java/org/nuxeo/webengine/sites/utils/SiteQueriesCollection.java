@@ -18,8 +18,6 @@
 package org.nuxeo.webengine.sites.utils;
 
 import org.nuxeo.common.utils.URIUtils;
-import org.nuxeo.ecm.core.api.ClientException;
-import org.nuxeo.ecm.core.api.ClientRuntimeException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -50,16 +48,12 @@ public class SiteQueriesCollection {
             private static final long serialVersionUID = 259658360650139844L;
 
             public boolean accept(DocumentModel docModel) {
-                try {
-                    String webcUrl = (String) docModel.getPropertyValue("webc:url");
-                    if (webcUrl != null) {
-                        String encodedUrl = URIUtils.quoteURIPathComponent(url, false);
-                        return webcUrl.equals(encodedUrl);
-                    }
-                    return false;
-                } catch (Exception e) {
-                    throw new ClientRuntimeException(e);
+                String webcUrl = (String) docModel.getPropertyValue("webc:url");
+                if (webcUrl != null) {
+                    String encodedUrl = URIUtils.quoteURIPathComponent(url, false);
+                    return webcUrl.equals(encodedUrl);
                 }
+                return false;
             }
         });
     }
